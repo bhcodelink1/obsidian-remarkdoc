@@ -35,13 +35,15 @@ In plugin settings, global configuration of font and spacing for the document ca
   
 The output file name can be specified by adding a **docxfilename** frontmatter item to a document with the path and file included. For example:  
   
+```yml  
 docxfilename: Documents/word_document.docx  
-  
+```  
+
 If a filename is not added, then a prompt will ask for the filename, and it will be added to the frontmatter.  
   
 More granular document styling can be set by adding a **docxstyling** frontmatter item to a document as follows (defaults have been included):  
   
-
+```yml
 docxstyling:  
   title:  
     font: Palatino Linotype  
@@ -102,6 +104,7 @@ docxstyling:
     initialFontSize: 10  
     initialIndent: 0.25  
     indentIncrement: 0.25   
+```
   
 ### to export to pdf
 
@@ -110,9 +113,11 @@ This plugin will export a markdown file to html, which can be then exported from
 In settings, a global path to a css file can be provided. A css file with formatting should be added by the user to their obsidian vault.  A sample css is provided in the github repository with the name "sample_template.css".
 
 Document specific css files can be specified using a **css** frontmatter item. For example:
-
+   
+```yml
 css: CSSFiles/resume3.css
-
+```
+  
 To run the export, use the command palette to pick the command: "Convert the current document to a pdf ready html file". A new html file will appear in the same directory as the file being edited. This file can be opened in the browser, and can be exported to a pdf using "print to pdf" or the share sheet on iPadOs.
 
 ### to export to google doc
