@@ -1,6 +1,6 @@
 import { Plugin, Editor, MarkdownView,  Notice,  getFrontMatterInfo,  parseYaml } from 'obsidian';
 import {createDocxFile} from './assets/modules/createDocx';
-import {getFileFromPath} from './assets/modules/utilities';
+import {getFileFromPath, getDefaultCss} from './assets/modules/utilities';
 import {createPdfFile} from './assets/modules/createHtmlPdf'
 import {createGdocFile} from './assets/modules/createHtmlGdoc'
 import {docxModal} from './assets/modules/filenameModal'
@@ -68,26 +68,6 @@ export default class MyPlugin extends Plugin {
 		await this.saveData(this.settings);
 	}
 
-
-	addDocxFrontMatter(editor: Editor) {
-		var fulldoc = editor.getDoc().getValue();
-		var frontmatter = getFrontMatterInfo(fulldoc)
-		var frontmattertext = frontmatter.frontmatter
-		var frontmatteryaml = parseYaml(frontmattertext)
-		// const frontmatterContent = "" 
-		if ('docxfilename' in frontmatteryaml){
-			
-			} else {
-				const file = this.app.workspace.getActiveFile();
-				if (file){
-				this.app.fileManager.processFrontMatter(file, (frontmatter) => {
-					// add front matter here - create dictionary with information
-					
-					// frontmatter['docxfilename'] = result;
-				})
-			}
-		}
-	}
 
 	async markdownToDocx(editor: Editor) {
 
@@ -180,14 +160,18 @@ export default class MyPlugin extends Plugin {
 		var body = fulldoc.replace(dividertext, "")
 		body = body.replace(frontmattertext, "")
 		body = body.replace(dividertext, "")
-		const zoteroPath= this.settings.zoteroPath
-		const cssfilename = this.settings.cssFile
 
-		var exportCssFilename = zoteroPath + cssfilename
+		var exportCssFilename = ''
+
+		if (this.settings.cssFile!=''){
+			exportCssFilename = this.settings.cssFile
+		}
+
+		
 
 		if (fmc['css']){
 			exportCssFilename = fmc['css']
-		}
+		} 
 
 
 		const filename:string = file.basename;
@@ -196,10 +180,13 @@ export default class MyPlugin extends Plugin {
 		const destfilename = basefilename + '.html'
 
 
-		// body = formatsupersubscript(body)
-
-
-		var csscontent = await getFileFromPath(exportCssFilename)
+//  check if exportCSSFIlename != '', then load otherwise get default css
+		var csscontent = ''
+		if (exportCssFilename!='') {
+			csscontent = await getFileFromPath(exportCssFilename) ?? getDefaultCss()
+		} else {
+			csscontent = getDefaultCss()
+		}
 
 		await createPdfFile(filename, csscontent, body, destfilename)
 		
@@ -223,14 +210,17 @@ export default class MyPlugin extends Plugin {
 		var body = fulldoc.replace(dividertext, "")
 		body = body.replace(frontmattertext, "")
 		body = body.replace(dividertext, "")
-		const zoteroPath= this.settings.zoteroPath
-		const cssfilename = this.settings.cssFile
+		var exportCssFilename = ''
 
-		var exportCssFilename = zoteroPath + cssfilename
+		if (this.settings.cssFile!=''){
+			exportCssFilename = this.settings.cssFile
+		}
+
+		
 
 		if (fmc['css']){
 			exportCssFilename = fmc['css']
-		}
+		} 
 
 
 		const filename:string = file.basename;
@@ -238,11 +228,12 @@ export default class MyPlugin extends Plugin {
 		const basefilename = path.replace(/\.[^/.]+$/, "")
 		const destfilename = basefilename + '.html'
 
-
-		// body = formatsupersubscript(body)
-
-
-		var csscontent = await getFileFromPath(exportCssFilename)
+		var csscontent = ''
+		if (exportCssFilename!='') {
+			csscontent = await getFileFromPath(exportCssFilename) ?? getDefaultCss()
+		} else {
+			csscontent = getDefaultCss()
+		}
 
 		await createGdocFile(filename, csscontent, body, destfilename)
 		

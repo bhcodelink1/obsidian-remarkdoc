@@ -1,0 +1,152 @@
+@media print {
+
+html {
+  font-family: "Times New Roman", Times, serif  !important; 
+}
+
+.frontmatter {display: none}
+
+body {
+  font-family: "Times New Roman", Times, serif; 
+  font-size: 12pt;
+
+}
+
+h1 {
+color : black;
+  font-family: "Times New Roman", Times, serif !important; 
+  font-size: 15pt !important;
+  font-weight: bold !important;
+    text-indent: 0em !important;
+
+}
+
+h2 {
+color : black;
+  font-family: "Times New Roman", Times, serif !important; 
+  font-size: 14pt !important;
+  font-weight: bold !important;
+      text-indent: 0em !important;
+
+}
+
+
+h3 {
+color : black;
+  font-family: "Times New Roman", Times, serif !important; 
+  font-size: 13pt !important;
+  font-weight: italic !important;
+      text-indent: 0em !important;
+
+}
+
+h4 {
+color : black;
+  font-family: "Times New Roman", Times, serif !important; 
+  font-size: 12pt !important;
+      text-indent: 0em !important;
+
+}
+
+
+ul {
+  font-family: "Times New Roman", Times, serif; 
+  font-size: 12pt;
+
+}
+
+li {
+  font-family: "Times New Roman", Times, serif; 
+  font-size: 12pt;
+    color: black !important;
+
+
+}
+
+li::before {
+    position: relative;  
+    color: black !important;
+
+
+}
+
+
+li p {
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    display:inline;
+}
+
+ol li::before {
+    position: relative;  
+        width: 20px !important;   
+
+    color: black !important;
+
+
+}
+
+
+
+
+a {
+  font-family: "Times New Roman", Times, serif !important; 
+  font-size: 12pt;
+  color: black !important;
+}
+
+p {
+  font-family: "Times New Roman", Times, serif; 
+  font-size: 12pt;
+
+}
+
+
+
+/* --------------------------------------------   */
+/* Latex table-layout:                            */
+/* --------------------------------------------   */
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+	width: auto;
+	border-top: 2.27px solid black;
+	border-bottom: 2.27px solid black;
+	overflow-x: auto;	
+	box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+}
+th,
+td {
+	border: 0 none;
+	padding: 0.51rem;
+	line-height: 1.1;
+}
+table > tbody > tr:first-child > td,
+table > tbody > tr:first-child > th {
+	border-top: 1.36px solid black;
+}
+table > tbody > tr:last-child > td,
+table > tbody > tr:last-child > th {
+	border-bottom: 1.36px solid black;
+}
+thead th {
+    background-color: white !important;
+    font-weight: 700;    
+    padding: 8px 9px 5px 9px;
+}
+tr:nth-child(even) {
+      background-color: #ebecf1 ;
+}
+tbody tr:hover td {
+	background-color: #f5f1da;
+}
+/* --------------------------------------------   */
+
+
+
+
+
+
+}

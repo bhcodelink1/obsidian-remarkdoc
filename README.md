@@ -27,7 +27,7 @@ To export to google docs without the need for a google api key, an html file is 
 This plugin was built to be usable on both desktop/laptop computers (e.g. mac) as well as on an iPad, and does not have a dependency on pandoc.  
   
 ## How to use
-### to export to docx
+### To export to docx
 
 Use the command from the command palette: Convert the current document to a docx word file to export the file in the editor to docx.  
   
@@ -106,22 +106,106 @@ docxstyling:
     indentIncrement: 0.25   
 ```
   
-### to export to pdf
+### To export to pdf
 
-This plugin will export a markdown file to html, which can be then exported from the browser to pdf. This approach is taken so that both ipad and desktop users can export, without pandoc. 
+This plugin will export a markdown file to html, which can be then exported from the browser to pdf. This approach is taken so that both ipad and desktop users can export without pandoc. 
 
-In settings, a global path to a css file can be provided. A css file with formatting should be added by the user to their obsidian vault.  A sample css is provided in the github repository with the name "sample_template.css".
+In settings, a global path to a css file can be provided. A css file with formatting should be added by the user to their obsidian vault.  A sample css is provided in the github repository with the name "sample_template.css", and this is used as the default if no file is set in settings.
 
 Document specific css files can be specified using a **css** frontmatter item. For example:
    
 ```yml
-css: CSSFiles/resume3.css
+css: CSSFiles/css_template.css
 ```
   
 To run the export, use the command palette to pick the command: "Convert the current document to a pdf ready html file". A new html file will appear in the same directory as the file being edited. This file can be opened in the browser, and can be exported to a pdf using "print to pdf" or the share sheet on iPadOs.
 
-### to export to google doc
+### To export to google doc
+This plugin will export a markdown file to html, which can be then converted to a google doc. This approach is taken so that both ipad and desktop users can export without pandoc, and the user doesn't have to create a google api token. 
 
+To run the export, use the command palette to pick the command: "Convert the current document to a gdoc ready html file". A new html file will appear in the same directory as the file being edited. This file should then be loaded into google drive. From there, it can be opened in google docs, and it will be converted to a google doc file.
+
+### Creating a template 
+Because frontmatter can be used as a template for styling at the document level, a good approach is to set up a template file with configuration frontmatter keys. 
+
+The following can be added to a template that can be imported to markdown files.
+
+
+```yml
+docxstyling:  
+  title:  
+    font: Palatino Linotype  
+    fontSize: 16  
+    spacing: 1  
+    smallCaps: false  
+    allCaps: false  
+  heading1:  
+    font: Palatino Linotype  
+    fontSize: 14  
+    spacing: 1  
+    smallCaps: true  
+    allCaps: false  
+  heading2:  
+    font: Palatino Linotype  
+    fontSize: 12  
+    spacing: 1  
+    smallCaps: true  
+    allCaps: false  
+  heading3:  
+    font: Palatino Linotype  
+    fontSize: 12  
+    spacing: 1  
+    smallCaps: true  
+    allCaps: false  
+  heading4:  
+    font: Palatino Linotype  
+    fontSize: 12  
+    spacing: 1  
+    smallCaps: false  
+    allCaps: false  
+  heading5:  
+    font: Palatino Linotype  
+    fontSize: 11  
+    spacing: 1  
+    smallCaps: false  
+    allCaps: false  
+  heading6:  
+    font: Palatino Linotype  
+    fontSize: 11  
+    spacing: 1  
+    smallCaps: false  
+    allCaps: false  
+  body:  
+    font: Palatino Linotype  
+    fontSize: 10  
+    spacing: 1  
+    smallCaps: false  
+    allCaps: false  
+  table:  
+    headerShading: "#ffffff"  
+    tableFontSize: 10  
+    tableFont: Palatino Linotype  
+    tableSpacing: 1  
+    tableBorderColor: "#ffffff"  
+  bullets:  
+    fontName: Palatino Linotype  
+    initialFontSize: 10  
+    initialIndent: 0.25  
+    indentIncrement: 0.25
+css: 
+docxfilename: 
+```
+
+
+
+
+### TO DO:
+x add default css to repo
+x add code to load default css if not in settings
+x show what a default template might look like in readme
+double check google doc export
+test image export for docx
+test image export for pdf
 
 
 
