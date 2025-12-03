@@ -29,79 +29,80 @@ This plugin was built to be usable on both desktop/laptop computers (e.g. mac) a
 ## How to use
 ### to export to docx
 
-Use the command from the command palette: Convert the current document to a docx word file to export the file in the editor to docx.
+Use the command from the command palette: Convert the current document to a docx word file to export the file in the editor to docx.  
+  
+In plugin settings, global configuration of font and spacing for the document can be set.  
+  
+The output file name can be specified by adding a **docxfilename** frontmatter item to a document with the path and file included. For example:  
+  
+docxfilename: Documents/word_document.docx  
+  
+If a filename is not added, then a prompt will ask for the filename, and it will be added to the frontmatter.  
+  
+More granular document styling can be set by adding a **docxstyling** frontmatter item to a document as follows (defaults have been included):  
+  
 
-In plugin settings, global configuration of font and spacing for the document can be set.
-
-The output file name can be specified by adding a **docxfilename** frontmatter item to a document with the path and file included. For example:
-
-docxfilename: Documents/word_document.docx
-
-If a filename is not added, then a prompt will ask for the filename, and it will be added to the frontmatter.
-
-More granular document styling can be set by adding a **docxstyling** frontmatter item to a document as follows (defaults have been included):
-
-docxstyling:
-  title:
-    font: Palatino Linotype
-    fontSize: 16
-    spacing: 1
-    smallCaps: false
-    allCaps: false
-  heading1:
-    font: Palatino Linotype
-    fontSize: 14
-    spacing: 1
-    smallCaps: true
-    allCaps: false
-  heading2:
-    font: Palatino Linotype
-    fontSize: 12
-    spacing: 1
-    smallCaps: true
-    allCaps: false
-  heading3:
-    font: Palatino Linotype
-    fontSize: 12
-    spacing: 1
-    smallCaps: true
-    allCaps: false
-  heading4:
-    font: Palatino Linotype
-    fontSize: 12
-    spacing: 1
-    smallCaps: false
-    allCaps: false
-  heading5:
-    font: Palatino Linotype
-    fontSize: 11
-    spacing: 1
-    smallCaps: false
-    allCaps: false
-  heading6:
-    font: Palatino Linotype
-    fontSize: 11
-    spacing: 1
-    smallCaps: false
-    allCaps: false
-  body:
-    font: Palatino Linotype
-    fontSize: 10
-    spacing: 1
-    smallCaps: false
-    allCaps: false
-  table:
-    headerShading: "#ffffff"
-    tableFontSize: 10
-    tableFont: Palatino Linotype
-    tableSpacing: 1
-    tableBorderColor: "#ffffff"
-  bullets:
-    fontName: Palatino Linotype
-    initialFontSize: 10
-    initialIndent: 0.25
-    indentIncrement: 0.25
-
+docxstyling:  
+  title:  
+    font: Palatino Linotype  
+    fontSize: 16  
+    spacing: 1  
+    smallCaps: false  
+    allCaps: false  
+  heading1:  
+    font: Palatino Linotype  
+    fontSize: 14  
+    spacing: 1  
+    smallCaps: true  
+    allCaps: false  
+  heading2:  
+    font: Palatino Linotype  
+    fontSize: 12  
+    spacing: 1  
+    smallCaps: true  
+    allCaps: false  
+  heading3:  
+    font: Palatino Linotype  
+    fontSize: 12  
+    spacing: 1  
+    smallCaps: true  
+    allCaps: false  
+  heading4:  
+    font: Palatino Linotype  
+    fontSize: 12  
+    spacing: 1  
+    smallCaps: false  
+    allCaps: false  
+  heading5:  
+    font: Palatino Linotype  
+    fontSize: 11  
+    spacing: 1  
+    smallCaps: false  
+    allCaps: false  
+  heading6:  
+    font: Palatino Linotype  
+    fontSize: 11  
+    spacing: 1  
+    smallCaps: false  
+    allCaps: false  
+  body:  
+    font: Palatino Linotype  
+    fontSize: 10  
+    spacing: 1  
+    smallCaps: false  
+    allCaps: false  
+  table:  
+    headerShading: "#ffffff"  
+    tableFontSize: 10  
+    tableFont: Palatino Linotype  
+    tableSpacing: 1  
+    tableBorderColor: "#ffffff"  
+  bullets:  
+    fontName: Palatino Linotype  
+    initialFontSize: 10  
+    initialIndent: 0.25  
+    indentIncrement: 0.25   
+  
 ### to export to pdf
 
 This plugin will export a markdown file to html, which can be then exported from the browser to pdf. This approach is taken so that both ipad and desktop users can export, without pandoc. 
