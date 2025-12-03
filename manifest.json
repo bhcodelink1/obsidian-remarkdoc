@@ -1,6 +1,6 @@
 {
 	"id": "remarkdoc-plugin",
-	"name": "Docx Eporter Plugin",
+	"name": "Docx Exporter Plugin",
 	"version": "1.0.0",
 	"minAppVersion": "0.15.0",
 	"description": "Exporter from markdown to docx or pdf and google doc ready html",

@@ -1,94 +1,122 @@
-# Obsidian Sample Plugin
+# Obsidian docx, pdf, and google docs exporter using Remark/unified
 
-This is a sample plugin for Obsidian (https://obsidian.md).
+## Approach
+This app enables exporting markdown to docx (ie MS Word), pdf, and google docs, without the use of pandoc. To achieve this goal, the app uses the unified and remark library with plugins.  
 
-This project uses TypeScript to provide type checking and documentation.
-The repo depends on the latest plugin API (obsidian.d.ts) in TypeScript Definition format, which contains TSDoc comments describing what it does.
+https://unifiedjs.com
+https://unifiedjs.com/explore/package/remark/
 
-This sample plugin demonstrates some of the basic functionality the plugin API can do.
-- Adds a ribbon icon, which shows a Notice when clicked.
-- Adds a command "Open Sample Modal" which opens a Modal.
-- Adds a plugin setting tab to the settings page.
-- Registers a global click event and output 'click' to the console.
-- Registers a global interval which logs 'setInterval' to the console.
+Unified and remark parse markdown, and convert it to an abstract syntax tree (AST).
 
-## First time developing plugins?
+docx.js is used to create docx files.
+https://docx.js.org/#/
 
-Quick starting guide for new plugin devs:
+The mdast2docx library is used to convert the AST to docx and connects to docx.js. This module also parses images, tables, and lists.
+https://github.com/md2docx/mdast2docx
 
-- Check if [someone already developed a plugin for what you want](https://obsidian.md/plugins)! There might be an existing plugin similar enough that you can partner up with.
-- Make a copy of this repo as a template with the "Use this template" button (login to GitHub if you don't see it).
-- Clone your repo to a local development folder. For convenience, you can place this folder in your `.obsidian/plugins/your-plugin-name` folder.
-- Install NodeJS, then run `npm i` in the command line under your repo folder.
-- Run `npm run dev` to compile your plugin from `main.ts` to `main.js`.
-- Make changes to `main.ts` (or create new `.ts` files). Those changes should be automatically compiled into `main.js`.
-- Reload Obsidian to load the new version of your plugin.
-- Enable plugin in settings window.
-- For updates to the Obsidian API run `npm update` in the command line under your repo folder.
+The module can be configured to specify docx formatting on output. 
 
-## Releasing new releases
+To export to pdf, the plugin generates an html file that can be printed to pdf using the export to pdf capability of a browser on the device. Pagination and page formatting are configurable using css.
 
-- Update your `manifest.json` with your new version number, such as `1.0.1`, and the minimum Obsidian version required for your latest release.
-- Update your `versions.json` file with `"new-plugin-version": "minimum-obsidian-version"` so older versions of Obsidian can download an older version of your plugin that's compatible.
-- Create new GitHub release using your new version number as the "Tag version". Use the exact version number, don't include a prefix `v`. See here for an example: https://github.com/obsidianmd/obsidian-sample-plugin/releases
-- Upload the files `manifest.json`, `main.js`, `styles.css` as binary attachments. Note: The manifest.json file must be in two places, first the root path of your repository and also in the release.
-- Publish the release.
+The paged.js script is used to create print ready pdf files.
 
-> You can simplify the version bump process by running `npm version patch`, `npm version minor` or `npm version major` after updating `minAppVersion` manually in `manifest.json`.
-> The command will bump version in `manifest.json` and `package.json`, and add the entry for the new version to `versions.json`
+https://pagedjs.org
 
-## Adding your plugin to the community plugin list
+To export to google docs without the need for a google api key, an html file is generated that can be imported into google drive, and will be converted to a formatted google docs file. This approach also preserves table settings, unlike direct imports of docx files.
 
-- Check the [plugin guidelines](https://docs.obsidian.md/Plugins/Releasing/Plugin+guidelines).
-- Publish an initial version.
-- Make sure you have a `README.md` file in the root of your repo.
-- Make a pull request at https://github.com/obsidianmd/obsidian-releases to add your plugin.
+This plugin was built to be usable on both desktop/laptop computers (e.g. mac) as well as on an iPad, and does not have a dependency on pandoc.
 
 ## How to use
+### to export to docx
 
-- Clone this repo.
-- Make sure your NodeJS is at least v16 (`node --version`).
-- `npm i` or `yarn` to install dependencies.
-- `npm run dev` to start compilation in watch mode.
+Use the command from the command palette: Convert the current document to a docx word file to export the file in the editor to docx.
 
-## Manually installing the plugin
+In plugin settings, global configuration of font and spacing for the document can be set.
 
-- Copy over `main.js`, `styles.css`, `manifest.json` to your vault `VaultFolder/.obsidian/plugins/your-plugin-id/`.
+The output file name can be specified by adding a **docxfilename** frontmatter item to a document with the path and file included. For example:
 
-## Improve code quality with eslint (optional)
-- [ESLint](https://eslint.org/) is a tool that analyzes your code to quickly find problems. You can run ESLint against your plugin to find common bugs and ways to improve your code. 
-- To use eslint with this project, make sure to install eslint from terminal:
-  - `npm install -g eslint`
-- To use eslint to analyze this project use this command:
-  - `eslint main.ts`
-  - eslint will then create a report with suggestions for code improvement by file and line number.
-- If your source code is in a folder, such as `src`, you can use eslint with this command to analyze all files in that folder:
-  - `eslint ./src/`
+docxfilename: Documents/word_document.docx
 
-## Funding URL
+If a filename is not added, then a prompt will ask for the filename, and it will be added to the frontmatter.
 
-You can include funding URLs where people who use your plugin can financially support it.
+More granular document styling can be set by adding a **docxstyling** frontmatter item to a document as follows (defaults have been included):
 
-The simple way is to set the `fundingUrl` field to your link in your `manifest.json` file:
+docxstyling:
+  title:
+    font: Palatino Linotype
+    fontSize: 16
+    spacing: 1
+    smallCaps: false
+    allCaps: false
+  heading1:
+    font: Palatino Linotype
+    fontSize: 14
+    spacing: 1
+    smallCaps: true
+    allCaps: false
+  heading2:
+    font: Palatino Linotype
+    fontSize: 12
+    spacing: 1
+    smallCaps: true
+    allCaps: false
+  heading3:
+    font: Palatino Linotype
+    fontSize: 12
+    spacing: 1
+    smallCaps: true
+    allCaps: false
+  heading4:
+    font: Palatino Linotype
+    fontSize: 12
+    spacing: 1
+    smallCaps: false
+    allCaps: false
+  heading5:
+    font: Palatino Linotype
+    fontSize: 11
+    spacing: 1
+    smallCaps: false
+    allCaps: false
+  heading6:
+    font: Palatino Linotype
+    fontSize: 11
+    spacing: 1
+    smallCaps: false
+    allCaps: false
+  body:
+    font: Palatino Linotype
+    fontSize: 10
+    spacing: 1
+    smallCaps: false
+    allCaps: false
+  table:
+    headerShading: "#ffffff"
+    tableFontSize: 10
+    tableFont: Palatino Linotype
+    tableSpacing: 1
+    tableBorderColor: "#ffffff"
+  bullets:
+    fontName: Palatino Linotype
+    initialFontSize: 10
+    initialIndent: 0.25
+    indentIncrement: 0.25
 
-```json
-{
-    "fundingUrl": "https://buymeacoffee.com"
-}
-```
+### to export to pdf
 
-If you have multiple URLs, you can also do:
+This plugin will export a markdown file to html, which can be then exported from the browser to pdf. This approach is taken so that both ipad and desktop users can export, without pandoc. 
 
-```json
-{
-    "fundingUrl": {
-        "Buy Me a Coffee": "https://buymeacoffee.com",
-        "GitHub Sponsor": "https://github.com/sponsors",
-        "Patreon": "https://www.patreon.com/"
-    }
-}
-```
+In settings, a global path to a css file can be provided. A css file with formatting should be added by the user to their obsidian vault.  A sample css is provided in the github repository with the name "sample_template.css".
 
-## API Documentation
+Document specific css files can be specified using a **css** frontmatter item. For example:
 
-See https://github.com/obsidianmd/obsidian-api
+css: CSSFiles/resume3.css
+
+To run the export, use the command palette to pick the command: "Convert the current document to a pdf ready html file". A new html file will appear in the same directory as the file being edited. This file can be opened in the browser, and can be exported to a pdf using "print to pdf" or the share sheet on iPadOs.
+
+### to export to google doc
+
+
+
+
+
