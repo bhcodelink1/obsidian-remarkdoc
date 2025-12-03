@@ -2,30 +2,30 @@
 
 ## Approach
 This app enables exporting markdown to docx (ie MS Word), pdf, and google docs, without the use of pandoc. To achieve this goal, the app uses the unified and remark library with plugins.  
-
-https://unifiedjs.com
-https://unifiedjs.com/explore/package/remark/
-
-Unified and remark parse markdown, and convert it to an abstract syntax tree (AST).
-
-docx.js is used to create docx files.
-https://docx.js.org/#/
-
-The mdast2docx library is used to convert the AST to docx and connects to docx.js. This module also parses images, tables, and lists.
-https://github.com/md2docx/mdast2docx
-
+  
+https://unifiedjs.com  
+https://unifiedjs.com/explore/package/remark/  
+  
+Unified and remark parse markdown, and convert it to an abstract syntax tree (AST).  
+  
+docx.js is used to create docx files.  
+https://docx.js.org/#/  
+  
+The mdast2docx library is used to convert the AST to docx and connects to docx.js. This module also parses images, tables, and lists.  
+https://github.com/md2docx/mdast2docx  
+    
 The module can be configured to specify docx formatting on output. 
-
-To export to pdf, the plugin generates an html file that can be printed to pdf using the export to pdf capability of a browser on the device. Pagination and page formatting are configurable using css.
-
-The paged.js script is used to create print ready pdf files.
-
-https://pagedjs.org
-
-To export to google docs without the need for a google api key, an html file is generated that can be imported into google drive, and will be converted to a formatted google docs file. This approach also preserves table settings, unlike direct imports of docx files.
-
-This plugin was built to be usable on both desktop/laptop computers (e.g. mac) as well as on an iPad, and does not have a dependency on pandoc.
-
+  
+To export to pdf, the plugin generates an html file that can be printed to pdf using the export to pdf capability of a browser on the device. Pagination and page formatting are configurable using css.  
+  
+The paged.js script is used to create print ready pdf files.  
+  
+https://pagedjs.org  
+  
+To export to google docs without the need for a google api key, an html file is generated that can be imported into google drive, and will be converted to a formatted google docs file. This approach also preserves table settings, unlike direct imports of docx files.  
+  
+This plugin was built to be usable on both desktop/laptop computers (e.g. mac) as well as on an iPad, and does not have a dependency on pandoc.  
+  
 ## How to use
 ### to export to docx
 
