@@ -11,6 +11,22 @@
 	"keywords": [],
 	"author": "",
 	"license": "MIT",
+	"dependencies": {
+		"unified":"latest",
+		"remark-parse":"latest",
+		"remark-gfm":"latest",
+		"remark-supersub":"latest",
+		"remark-breaks":"latest",
+		"@m2d/core":"latest",
+		"@m2d/image":"latest",
+		"@m2d/table":"latest",
+		"@m2d/list":"latest",
+		"@m2d/html":"latest",
+		"remark-rehype":"latest" ,
+		"rehype-stringify":"latest" ,
+		"rehype-document":"latest",
+		"juice":"latest"
+	},
 	"devDependencies": {
 		"@types/node": "^16.11.6",
 		"@typescript-eslint/eslint-plugin": "5.29.0",

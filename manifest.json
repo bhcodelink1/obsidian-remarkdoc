@@ -1,11 +1,11 @@
 {
-	"id": "sample-plugin",
-	"name": "Sample Plugin",
+	"id": "remarkdoc-plugin",
+	"name": "Docx Eporter Plugin",
 	"version": "1.0.0",
 	"minAppVersion": "0.15.0",
-	"description": "Demonstrates some of the capabilities of the Obsidian API.",
-	"author": "Obsidian",
-	"authorUrl": "https://obsidian.md",
-	"fundingUrl": "https://obsidian.md/pricing",
+	"description": "Exporter from markdown to docx or pdf and google doc ready html",
+	"author": "Codelink",
+	"authorUrl": "https://github.com/bhcodelink1/obsidian-remarkdoc",
+	"fundingUrl": "https://github.com/bhcodelink1/obsidian-remarkdoc",
 	"isDesktopOnly": false
 }
