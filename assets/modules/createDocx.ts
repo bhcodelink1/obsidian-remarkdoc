@@ -389,6 +389,13 @@ function setTableConfig (currentSettings: WritingPluginSettings, docxstyling : o
           }
         }
 
+        if (currentSettings.docxTableBorder) {
+          if (currentSettings.docxTableBorder!=''){
+            borderColor = currentSettings.docxTableBorder
+
+          }
+        }
+
 
   if ('table' in docxstyling){
           const tableStyle = docxstyling['table']

@@ -60,6 +60,20 @@ export class WritingSettingTab extends PluginSettingTab {
 							await this.plugin.saveSettings();
 				});
 				});
+		new Setting(containerEl)
+				.setName('Color for table borders to use in docx export')
+				.setDesc('Global table border color setting for exports to microsoft word.')
+				.addDropdown((dropdown) => {
+					dropdown
+					.addOption("#000000", "Black")
+					.addOption("#ffffff", "White")
+					.setValue(this.plugin.settings.docxTableBorder)
+					.onChange(async (value) => {
+							console.log('Default table border: ' + value);
+							this.plugin.settings.docxTableBorder = value;
+							await this.plugin.saveSettings();
+				});
+				});
 
 	}
 
