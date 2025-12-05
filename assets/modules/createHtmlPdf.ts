@@ -1,5 +1,5 @@
-import {  Notice } from 'obsidian';
-
+import {  Notice, TFile } from 'obsidian';
+import {convertWikiToMarkdownPdf} from './utilities'
 
 
 import {unified} from 'unified'
@@ -12,15 +12,17 @@ import rehypeStringify from 'rehype-stringify';
 import rehypeDocument from 'rehype-document';
 import remarkGfm from 'remark-gfm';
 import supersub from 'remark-supersub' 
+import remarkCallout from "@r4ai/remark-callout";
 
 import remarkBreaks from 'remark-breaks'
 
 
 
 
-	export async function createPdfFile(filename : string, csscontent : string, body : string, destfilename : string) {
+	export async function createPdfFile(filename : string, csscontent : string, body : string, destfilename : string, currentFile: TFile) {
 		const processor = unified()
 		.use(remarkParse)
+		.use(remarkCallout)
 		.use(remarkBreaks)
 		.use(supersub)
 		.use(remarkGfm)
@@ -29,9 +31,10 @@ import remarkBreaks from 'remark-breaks'
 		.use(rehypeDocument, {title: filename, style: csscontent, js: "https://unpkg.com/pagedjs/dist/paged.polyfill.js"})
 
 
+		const bodyclean = await convertWikiToMarkdownPdf(body, currentFile)
 
-		const doc = await processor.process(body);
-		console.log("file contents below")
+		const doc = await processor.process(bodyclean);
+		// console.log("file contents below")
 
 		var doctext:string  = String(doc);
 

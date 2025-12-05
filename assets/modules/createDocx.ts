@@ -1,17 +1,18 @@
-import {  Notice } from 'obsidian';
+import {  Notice, TFile } from 'obsidian';
 import {WritingPluginSettings} from './interfaces';
 
+import {convertWikiToMarkdown} from './utilities'
 
 import {unified} from 'unified'
 
 import remarkParse from "remark-parse";
 
-// import docx from "remark-docx"
 
 import remarkGfm from 'remark-gfm';
 import supersub from 'remark-supersub';
 
 import remarkBreaks from 'remark-breaks';
+import remarkCallout from "@r4ai/remark-callout";
 
 
 import { toDocx } from "@m2d/core";
@@ -25,15 +26,6 @@ import type { TableProps, RowProps, ICellProps, IFirstRowCellProps, ITableAlignm
 import type { IListPluginOptions } from "@m2d/list"
 
 
-function convertWikiToMarkdown(text : string) {
-  // Use a regular expression to find all wiki-style links
-  return text.replace(/\[\[(.*?)\]\]/g, function(match, p1) {
-      // Replace with Markdown-style links
-      var p1encode = encodeURIComponent(p1)
-      const outputtext = ['[](', p1encode, ')'].join("")
-      return outputtext;
-  });
-}
 
 
 function defineTextStyle(currentSettings: WritingPluginSettings, docxstyling: object, formatType: string, defaultFontSize:number): [string, number, number, boolean, boolean]  {
@@ -609,18 +601,19 @@ return bulletsLevelsConfig
 }
 
 
-export async function createDocxFile(currentSettings : WritingPluginSettings, docxstyling: object,  body : string, destfilename : string) {
+export async function createDocxFile(currentSettings : WritingPluginSettings, docxstyling: object,  body : string, destfilename : string, currentFile: TFile) {
     // get font and spacing from settings, set defaults if not entered
     
     
 
     // const docxprops = setDocumentConfig(documentfont, lineSpacing)
-        const docxprops = setDocumentConfig(currentSettings, docxstyling)
+    const docxprops = setDocumentConfig(currentSettings, docxstyling)
     
     
 
     const processor = unified()
       .use(remarkParse)
+      .use(remarkCallout)
       .use(remarkGfm)
       .use(remarkBreaks)
       .use(supersub)
@@ -628,8 +621,10 @@ export async function createDocxFile(currentSettings : WritingPluginSettings, do
 
 
 
-    const bodyclean = convertWikiToMarkdown(body)
+    const bodyclean = convertWikiToMarkdown(body, currentFile)
 		const doc = await processor.parse(bodyclean);
+
+    // const doc = await processor.parse(body);
 
 
 

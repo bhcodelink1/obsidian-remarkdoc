@@ -1,4 +1,4 @@
-import { Plugin, Editor, MarkdownView,  Notice,  getFrontMatterInfo,  parseYaml } from 'obsidian';
+import { Plugin, Editor, MarkdownView,  Notice,  getFrontMatterInfo,  parseYaml, TFile } from 'obsidian';
 import {createDocxFile} from './assets/modules/createDocx';
 import {getFileFromPath, getDefaultCss} from './assets/modules/utilities';
 import {createPdfFile} from './assets/modules/createHtmlPdf'
@@ -71,6 +71,7 @@ export default class MyPlugin extends Plugin {
 
 	async markdownToDocx(editor: Editor) {
 
+		const currentFile: TFile | null = this.app.workspace.getActiveFile();
 
 		var fulldoc = editor.getDoc().getValue();
 		var frontmatter = getFrontMatterInfo(fulldoc)
@@ -86,7 +87,7 @@ export default class MyPlugin extends Plugin {
 
 		var currentSettings = this.settings
 
-		if ('docxstyling' in frontmatteryaml){
+		if ((frontmatteryaml) && ('docxstyling' in frontmatteryaml)){
 			var docxstyling : object = frontmatteryaml['docxstyling']
 		} else {
 			var docxstyling : object = {}
@@ -103,7 +104,7 @@ export default class MyPlugin extends Plugin {
 			if ('docxfilename' in frontmatteryaml){
 				destfilename = frontmatteryaml['docxfilename']
 
-				await createDocxFile(currentSettings, docxstyling, body, destfilename) 
+				await createDocxFile(currentSettings, docxstyling, body, destfilename, currentFile) 
 
 			} else {
 				let noticestring = 'adding a frontmatter property "docxfilename" and a filename.'
@@ -116,7 +117,7 @@ export default class MyPlugin extends Plugin {
 					this.app.fileManager.processFrontMatter(file, (frontmatter) => {
 						frontmatter['docxfilename'] = result;
 
-					createDocxFile(currentSettings,docxstyling, body, destfilename) 
+					createDocxFile(currentSettings,docxstyling, body, destfilename, currentFile) 
 					});
 				}
 				  }).open();
@@ -135,7 +136,7 @@ export default class MyPlugin extends Plugin {
 				this.app.fileManager.processFrontMatter(file, (frontmatter) => {
 					frontmatter['docxfilename'] = result;
 
-				createDocxFile(currentSettings,docxstyling, body, destfilename) 
+				createDocxFile(currentSettings,docxstyling, body, destfilename, currentFile) 
 				});
 			}
 			  }).open();
@@ -144,7 +145,8 @@ export default class MyPlugin extends Plugin {
 	}
 
 	async markdownToPdf(editor: Editor) {
-
+		
+		console.log("function loaded")
 		const file = this.app.workspace.getActiveFile();
 
 		var fulldoc = editor.getDoc().getValue();
@@ -162,15 +164,17 @@ export default class MyPlugin extends Plugin {
 		body = body.replace(dividertext, "")
 
 		var exportCssFilename = ''
+		console.log("exportCSSFilename set")
 
-		if (this.settings.cssFile!=''){
+		if ((this.settings.cssFile!='') && (this.settings.cssFile)){
 			exportCssFilename = this.settings.cssFile
+			console.log("settings css set")
 		}
 
 		
-
-		if (fmc['css']){
+		if ((fmc) && ("css" in fmc)){
 			exportCssFilename = fmc['css']
+			console.log("frontmatter css set")
 		} 
 
 
@@ -179,16 +183,16 @@ export default class MyPlugin extends Plugin {
 		const basefilename = path.replace(/\.[^/.]+$/, "")
 		const destfilename = basefilename + '.html'
 
-
-//  check if exportCSSFIlename != '', then load otherwise get default css
 		var csscontent = ''
 		if (exportCssFilename!='') {
 			csscontent = await getFileFromPath(exportCssFilename) ?? getDefaultCss()
+			console.log("using exposrtcssfile value")
 		} else {
 			csscontent = getDefaultCss()
+			console.log("using default css value")
 		}
 
-		await createPdfFile(filename, csscontent, body, destfilename)
+		await createPdfFile(filename, csscontent, body, destfilename, file)
 		
 
 	}
@@ -212,13 +216,12 @@ export default class MyPlugin extends Plugin {
 		body = body.replace(dividertext, "")
 		var exportCssFilename = ''
 
-		if (this.settings.cssFile!=''){
+		if ((this.settings.cssFile!='') && (this.settings.cssFile)){
 			exportCssFilename = this.settings.cssFile
 		}
 
-		
 
-		if (fmc['css']){
+		if ((fmc) && ("css" in fmc)){
 			exportCssFilename = fmc['css']
 		} 
 
@@ -226,7 +229,7 @@ export default class MyPlugin extends Plugin {
 		const filename:string = file.basename;
 		const path:string = file.path;
 		const basefilename = path.replace(/\.[^/.]+$/, "")
-		const destfilename = basefilename + '.html'
+		const destfilename = basefilename + '-googledoc.html'
 
 		var csscontent = ''
 		if (exportCssFilename!='') {
@@ -235,7 +238,7 @@ export default class MyPlugin extends Plugin {
 			csscontent = getDefaultCss()
 		}
 
-		await createGdocFile(filename, csscontent, body, destfilename)
+		await createGdocFile(filename, csscontent, body, destfilename, file)
 		
 
 	}

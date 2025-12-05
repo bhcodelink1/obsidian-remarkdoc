@@ -25,6 +25,8 @@
 		"remark-rehype":"latest" ,
 		"rehype-stringify":"latest" ,
 		"rehype-document":"latest",
+		"@r4ai/remark-callout":"latest",
+		"remark-embed-images":"latest",
 		"juice":"latest"
 	},
 	"devDependencies": {

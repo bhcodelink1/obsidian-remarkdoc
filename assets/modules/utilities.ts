@@ -1,8 +1,171 @@
 import { TFile} from 'obsidian';
-// import { WritingPluginSettings} from './interfaces';
 
 
-// var documentfile = require('./docxstyle_template.json');
+
+export function convertWikiToMarkdown(text : string, currentFile: TFile) {
+  // Use a regular expression to find all wiki-style links
+  return text.replace(/\[\[(.*?)\]\]/g, function(match, p1) {
+	  // Replace with Markdown-style links
+	  const embeddedFile = this.app.metadataCache.getFirstLinkpathDest(p1, currentFile)
+	  console.log('file path is ' + embeddedFile.path)
+	  let imagefilepath: string | undefined
+	  var plencode = ""
+	  if(embeddedFile) {
+		  imagefilepath = this.app.vault.getResourcePath(embeddedFile)
+		  
+		  // const absolutePath = this.app.vault.adapter.getFullPath(embeddedFile)
+		  console.log("resource path to file is " + imagefilepath)
+		  // console.log("absolute path to file is " + absolutePath)
+		  // plencode = encodeURIComponent(absolutePath)
+		  plencode = imagefilepath ?? ""
+	  };
+	  console.log("image path obtained")
+	  // console.log("image path is " + imagefilepath)
+	  
+	  
+	  // console.log("path to file is " + p1)
+
+	  const outputtext = ['[](', plencode, ')'].join("")
+	  return outputtext;
+  });
+}
+
+
+// export  function convertWikiToMarkdownPdf(text : string, currentFile: TFile) {
+//   // Use a regular expression to find all wiki-style links
+//   return text.replace(/\[\[(.*?)\]\]/g,  function(match, p1) {
+// 	  // Replace with Markdown-style links
+// 	  const embeddedFile = this.app.metadataCache.getFirstLinkpathDest(p1, currentFile)
+// 	  console.log('file path is ' + embeddedFile.path)
+// 	  const fileextensionstring = embeddedFile.extension
+// 	  let imagefilepath: string | undefined
+// 	  var plencode = ""
+// 	  if(embeddedFile) {
+// 		console.log("file extension is " + fileextensionstring)
+// 		if(embeddedFile.extension=='png'){
+// 			console.log("png extension found")
+// 			const arrayBuffer =  this.app.vault.readBinary(embeddedFile);
+
+// 			const base64 = btoa(
+// 				String.fromCharCode(...new Uint8Array(arrayBuffer))
+// 			);
+// 			const mimeType =
+// 				embeddedFile.extension === "png" ? "image/png" : "image/jpeg";
+// 			const base64Data = `data:${mimeType};base64,${base64}`;
+// 			plencode = base64Data
+// 			console.log(plencode)
+
+// 		} else {
+
+// 		  imagefilepath = this.app.vault.getResourcePath(embeddedFile)
+		  
+
+// 		  console.log("resource path to file is " + imagefilepath)
+
+// 		  plencode = imagefilepath ?? ""
+// 	  };
+
+// 	  console.log("image path obtained")
+
+// 	}
+// 	  const outputtext = ['[](', plencode, ')'].join("")
+// 	  return outputtext;
+//   });
+// }
+
+// Note: `this` here is your plugin instance (or something that has `app`)
+
+async function shrinkPng(arrayBuffer: ArrayBuffer, maxWidth = 800) {
+    const blob = new Blob([arrayBuffer], { type: "image/png" });
+    const img = await createImageBitmap(blob);
+
+    const scale = maxWidth / img.width;
+    const canvas = document.createElement("canvas");
+    canvas.width = maxWidth;
+    canvas.height = img.height * scale;
+
+    const ctx = canvas.getContext("2d")!;
+    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+    // Convert to JPEG or a compressed PNG
+    const newBlob: Blob = await new Promise(res =>
+        canvas.toBlob(res, "image/jpeg", 0.85)  // JPEG = MUCH smaller
+    );
+
+    return newBlob.arrayBuffer();
+}
+
+
+export async function convertWikiToMarkdownPdf(
+	this: any,
+  text: string,
+  currentFile: TFile
+): Promise<string> {
+  const wikiRegex = /\[\[(.*?)\]\]/g;
+
+  let result = "";
+  let lastIndex = 0;
+
+  for (const match of text.matchAll(wikiRegex)) {
+    const fullMatch = match[0];  // e.g. "[[My Image.png]]"
+    const linkText = match[1];   // e.g. "My Image.png"
+    const index = match.index ?? 0;
+
+    // Add text before this match
+    result += text.slice(lastIndex, index);
+
+    const embeddedFile = this.app.metadataCache.getFirstLinkpathDest(linkText, currentFile);
+
+    let plencode = "";
+
+    if (embeddedFile) {
+      console.log("file path is " + embeddedFile.path);
+      console.log("file extension is " + embeddedFile.extension);
+
+      if (embeddedFile.extension === "png") {
+        console.log("png extension found");
+
+        // Async call — we can await it now
+        const arrayBuffer = await this.app.vault.readBinary(embeddedFile);
+		let sizeInBytes: number = arrayBuffer.byteLength;
+	
+		console.log(`The size of the ArrayBuffer is: ${sizeInBytes} bytes`);
+
+		const compressedpng = await shrinkPng(arrayBuffer,400)
+        const base64 = btoa(
+          String.fromCharCode(...new Uint8Array(compressedpng))
+        );
+
+		console.log('The size of the base64 data in characters is:' + base64.length);
+
+        const mimeType = "image/png";
+        const base64Data = `data:${mimeType};base64,${base64}`;
+        plencode = base64Data;
+        console.log(plencode);
+      } else {
+        const imagefilepath: string = this.app.vault.getResourcePath(embeddedFile);
+        console.log("resource path to file is " + imagefilepath);
+        plencode = imagefilepath ?? "";
+      }
+
+      console.log("image path obtained");
+    }
+
+    const outputtext = ["[](", plencode, ")"].join("");
+    result += outputtext;
+
+    // Move past this match
+    lastIndex = index + fullMatch.length;
+  }
+
+  // Add any remaining text after the last match
+  result += text.slice(lastIndex);
+
+  return result;
+}
+
+
+
 
 
 export function formatsupersubscript(body: string) {
@@ -192,53 +355,63 @@ export function getDefaultCss() : string {
 		}
 		tbody tr:hover td {
 			background-color: #f5f1da;
-		}`
-		return defaultCSS
+		}
+			
+		[data-callout] {
+			border-left: 4px solid #4a90e2;       /* accent bar */
+			background-color: #f5f8ff;            /* light blue background */
+			padding: 0.75rem 1rem;
+			margin: 1rem 0;
+			border-radius: 4px;
+			font-size: 0.95rem;
+			page-break-inside: avoid;             /* better for PDF / printing */
+			}
+
+		/* The callout title: <div data-callout-title>Note</div> */
+		[data-callout] > [data-callout-title] {
+		font-weight: 600;
+		margin-bottom: 0.25rem;
+		display: flex;
+		align-items: center;
 		}
 
-// function to update spacing of styledef
-// Function to update the spacing line value globally
-// function updateSpacingLineValue(document: Document, newLineValue: number): void {
-// 	document.paragraphStyles.forEach(style => {
-// 	  if (style.paragraph) {
-// 		style.paragraph.spacing.line = newLineValue;
-// 	  }
-// 	});
-//   }
+		/* Optional: style the title text a bit differently */
+		[data-callout] > [data-callout-title]::before {
+		content: "ⓘ ";
+		margin-right: 0.25rem;
+		font-size: 1rem;
+		}
 
-// function updateFontValue(document: Document, newFontValue: string): void {
-// 	document.paragraphStyles.forEach(style => {
-// 		style.run.font = newFontValue;
-// 	});
-//   }
-  
+		/* The body: <div data-callout-body> ... </div> */
+		[data-callout] > [data-callout-body] {
+		margin: 0;
+		}
 
-// export function getDocumentStyle(settings:WritingPluginSettings): Document {
-// 	// const documentfile = './docxstyle_template.json'
-// 	const documentstyle : Document = documentfile
-// 	if (settings.docxFont) {
-// 		if (settings.docxFont!=''){
-// 			const font=settings.docxFont
-// 			updateFontValue(documentstyle, font)
-// 		}
-// 	}
+		/* Remove extra margin on first/last elements inside the body */
+		[data-callout-body] > :first-child {
+		margin-top: 0;
+		}
+		[data-callout-body] > :last-child {
+		margin-bottom: 0;
+		}
 
-// 	if (settings.docxSpacing) {
-// 		if (settings.docxSpacing!=''){
-// 			let spacingnum = Number(settings.docxSpacing);
-// 			const spacing = spacingnum*240
-// 			updateSpacingLineValue(documentstyle, spacing)
-// 		}
-// 	}
-  
-// 	return documentstyle;
-//   }
+		/* Example: tweak styling based on data-callout-type */
+		[data-callout][data-callout-type="note"] {
+		border-left-color: #4a90e2;
+		background-color: #f5f8ff;
+		}
 
-// add a styledef function here
-// create a definition for a style object in interfaces
-// pass in settings - spacing and font for now
-// pass in frontmatter
-// test: if frontmatter exists - then if docxstyle exists - load docxstyle else, load default file and update with setting on spacing and font
-// export function getStyleDefinition()
+		[data-callout][data-callout-type="warning"] {
+		border-left-color: #f5a623;
+		background-color: #fff8e6;
+		}
 
-
+		[data-callout][data-callout-type="tip"] {
+		border-left-color: #2ecc71;
+		background-color: #f2fff8;
+		}
+		
+		
+		`
+		return defaultCSS
+		}

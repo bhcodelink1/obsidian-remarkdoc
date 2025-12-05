@@ -145,8 +145,60 @@ tbody tr:hover td {
 /* --------------------------------------------   */
 
 
+/* callouts   */
+[data-callout] {
+  border-left: 4px solid #4a90e2;       /* accent bar */
+  background-color: #f5f8ff;            /* light blue background */
+  padding: 0.75rem 1rem;
+  margin: 1rem 0;
+  border-radius: 4px;
+  font-size: 0.95rem;
+  page-break-inside: avoid;             /* better for PDF / printing */
+}
 
+/* The callout title: <div data-callout-title>Note</div> */
+[data-callout] > [data-callout-title] {
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+  display: flex;
+  align-items: center;
+}
 
+/* Optional: style the title text a bit differently */
+[data-callout] > [data-callout-title]::before {
+  content: "ⓘ ";
+  margin-right: 0.25rem;
+  font-size: 1rem;
+}
+
+/* The body: <div data-callout-body> ... </div> */
+[data-callout] > [data-callout-body] {
+  margin: 0;
+}
+
+/* Remove extra margin on first/last elements inside the body */
+[data-callout-body] > :first-child {
+  margin-top: 0;
+}
+[data-callout-body] > :last-child {
+  margin-bottom: 0;
+}
+
+/* Example: tweak styling based on data-callout-type */
+[data-callout][data-callout-type="note"] {
+  border-left-color: #4a90e2;
+  background-color: #f5f8ff;
+}
+
+[data-callout][data-callout-type="warning"] {
+  border-left-color: #f5a623;
+  background-color: #fff8e6;
+}
+
+[data-callout][data-callout-type="tip"] {
+  border-left-color: #2ecc71;
+  background-color: #f2fff8;
+}
 
 
 }
