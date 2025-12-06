@@ -34,7 +34,6 @@ import remarkBreaks from 'remark-breaks'
 		const bodyclean = await convertWikiToMarkdownPdf(body, currentFile)
 
 		const doc = await processor.process(bodyclean);
-		// console.log("file contents below")
 
 		var doctext:string  = String(doc);
 

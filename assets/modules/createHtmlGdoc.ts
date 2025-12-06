@@ -28,7 +28,7 @@ import juice from "juice";
 		.use(remarkGfm)
 		.use(remarkRehype)
 		.use(rehypeStringify)
-		.use(rehypeDocument, {title: filename, style: csscontent, js: "https://unpkg.com/pagedjs/dist/paged.polyfill.js"})
+		.use(rehypeDocument, {title: filename, style: csscontent})
 
 
 		const bodyclean = await convertWikiToMarkdownPdf(body, currentFile)

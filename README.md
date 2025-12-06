@@ -112,24 +112,31 @@ This plugin will export a markdown file to html, which can be then exported from
 
 In settings, a global path to a css file can be provided. A css file with formatting should be added by the user to their obsidian vault.  A sample css is provided in the github repository with the name "sample_template.css", and this is used as the default if no file is set in settings.
 
-Document specific css files can be specified using a **css** frontmatter item. For example:
+Document specific css files can be specified using a **pdfcss** frontmatter item. For example:
    
 ```yml
-css: CSSFiles/css_template.css
+pdfcss: CSSFiles/css_template.css
 ```
-  
-To run the export, use the command palette to pick the command: "Convert the current document to a pdf ready html file". A new html file will appear in the same directory as the file being edited. This file can be opened in the browser, and can be exported to a pdf using "print to pdf" or the share sheet on iPadOs.
+
+Then exported html will show a print ready, paginated, and formatted, document when viewed in a browser like safari or chrome.
+
+To run the export, use the command palette to pick the command: "Convert the current document to a pdf ready html file". A new html file will appear in the same directory as the file being edited. This file can be opened in the browser on pc or mac, or using quicklook on an ipad. To export to a pdf, use "print to pdf" on pc or mac, or by clicking save to files on iPadOs.
 
 ### To export to google doc
 This plugin will export a markdown file to html, which can be then converted to a google doc. This approach is taken so that both ipad and desktop users can export without pandoc, and the user doesn't have to create a google api token. 
 
-To run the export, use the command palette to pick the command: "Convert the current document to a gdoc ready html file". A new html file will appear in the same directory as the file being edited. This file should then be loaded into google drive. From there, it can be opened in google docs, and it will be converted to a google doc file.
+To run the export, use the command palette to pick the command: "Convert the current document to a gdoc ready html file". A new html file will appear in the same directory as the file being edited. This file should then be uploaded to google drive. From there, it can be opened in google docs, and it will be converted to a google doc file.
+
+Document specific css files can be specified using a **gdoccss** frontmatter item. For example:
+   
+```yml
+gdoccss: CSSFiles/css_template.css
+```
 
 ### Creating a template 
-Because frontmatter can be used as a template for styling at the document level, a good approach is to set up a template file with configuration frontmatter keys. 
+Because frontmatter can added using templates in obsidian, it can be used for styling at the document level. One good approach is to set up a template file with configuration frontmatter keys. 
 
-The following can be added to a template that can be imported to markdown files.
-
+The following can be added to a template that can be imported to markdown files. Document settings can be set by changing the default values.  Either smallcaps or allcaps should be set, not both; ms word will only use one or the other when both are set.
 
 ```yml
 docxstyling:  
@@ -192,8 +199,9 @@ docxstyling:
     initialFontSize: 10  
     initialIndent: 0.25  
     indentIncrement: 0.25
-css: 
-docxfilename: 
+pdfcss: enter path to file
+gdoccss: enter path to file
+docxfilename: enter path to file
 ```
 
 
@@ -203,9 +211,12 @@ docxfilename:
 x add default css to repo
 x add code to load default css if not in settings
 x show what a default template might look like in readme
-double check google doc export
-test image export for docx
-test image export for pdf
+x double check google doc export
+x test image export for docx
+x test image export for pdf
+change sample css to have top level vars for font/spacing/etc
+create a sample css for gdoc and pdf
+
 
 
 

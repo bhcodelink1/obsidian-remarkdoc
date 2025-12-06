@@ -1,6 +1,6 @@
 import { Plugin, Editor, MarkdownView,  Notice,  getFrontMatterInfo,  parseYaml, TFile } from 'obsidian';
 import {createDocxFile} from './assets/modules/createDocx';
-import {getFileFromPath, getDefaultCss} from './assets/modules/utilities';
+import {getFileFromPath, getDefaultCss, getDefaultGdocCss} from './assets/modules/utilities';
 import {createPdfFile} from './assets/modules/createHtmlPdf'
 import {createGdocFile} from './assets/modules/createHtmlGdoc'
 import {docxModal} from './assets/modules/filenameModal'
@@ -172,8 +172,8 @@ export default class MyPlugin extends Plugin {
 		}
 
 		
-		if ((fmc) && ("css" in fmc)){
-			exportCssFilename = fmc['css']
+		if ((fmc) && ("pdfcss" in fmc)){
+			exportCssFilename = fmc['pdfcss']
 			console.log("frontmatter css set")
 		} 
 
@@ -221,8 +221,8 @@ export default class MyPlugin extends Plugin {
 		}
 
 
-		if ((fmc) && ("css" in fmc)){
-			exportCssFilename = fmc['css']
+		if ((fmc) && ("gdoccss" in fmc)){
+			exportCssFilename = fmc['gdoccss']
 		} 
 
 
@@ -233,9 +233,9 @@ export default class MyPlugin extends Plugin {
 
 		var csscontent = ''
 		if (exportCssFilename!='') {
-			csscontent = await getFileFromPath(exportCssFilename) ?? getDefaultCss()
+			csscontent = await getFileFromPath(exportCssFilename) ?? getDefaultGdocCss()
 		} else {
-			csscontent = getDefaultCss()
+			csscontent = getDefaultGdocCss()
 		}
 
 		await createGdocFile(filename, csscontent, body, destfilename, file)
