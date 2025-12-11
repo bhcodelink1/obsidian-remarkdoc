@@ -183,12 +183,16 @@ export default class MyPlugin extends Plugin {
 		const basefilename = path.replace(/\.[^/.]+$/, "")
 		const destfilename = basefilename + '.html'
 
+		const cssFont = this.settings.cssFont
+		const cssSpacing = this.settings.cssSpacing
+		const cssParaIndent = this.settings.cssParaIndent
+
 		var csscontent = ''
 		if (exportCssFilename!='') {
-			csscontent = await getFileFromPath(exportCssFilename) ?? getDefaultCss()
+			csscontent = await getFileFromPath(exportCssFilename) ?? getDefaultCss(cssFont, cssSpacing, cssParaIndent)
 			console.log("using exposrtcssfile value")
 		} else {
-			csscontent = getDefaultCss()
+			csscontent = getDefaultCss(cssFont, cssSpacing, cssParaIndent)
 			console.log("using default css value")
 		}
 

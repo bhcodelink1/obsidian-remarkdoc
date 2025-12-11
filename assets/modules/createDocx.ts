@@ -20,7 +20,7 @@ import { imagePlugin } from "@m2d/image";
 import { tablePlugin } from "@m2d/table";
 import { listPlugin, createLevels } from "@m2d/list";
 import { htmlPlugin } from "@m2d/html";
-import { ShadingType,AlignmentType,BorderStyle,convertMillimetersToTwip, VerticalAlign, ILevelsOptions, LevelFormat, convertInchesToTwip } from "docx"
+import { ShadingType,AlignmentType,BorderStyle,convertMillimetersToTwip, VerticalAlign, ILevelsOptions, LevelFormat, convertInchesToTwip, ISectionOptions, ISectionPropertiesOptions } from "docx"
 import type { IDocxProps } from "@m2d/core"
 import type { TableProps, RowProps, ICellProps, IFirstRowCellProps, ITableAlignments, CellProps } from "@m2d/table"
 import type { IListPluginOptions } from "@m2d/list"
@@ -607,6 +607,32 @@ return bulletsLevelsConfig
   
 }
 
+function getPageProperties(docxstyling: object): [number, number, number, number] {
+    var topMargin = 1;
+    var bottomMargin = 1;
+    var leftMargin = 1;
+    var rightMargin = 1;
+
+    if ('margin' in docxstyling){
+            const margins = docxstyling['margin']
+            if ('top' in margins) {
+              topMargin = Number(margins['top'])
+            }
+            if ('bottom' in margins) {
+              bottomMargin = Number(margins['bottom'])
+            }
+            if ('left' in margins) {
+              leftMargin = Number(margins['left'])
+            }
+            if ('right' in margins) {
+              rightMargin = Number(margins['right'])
+            }
+          }
+
+
+          return [topMargin, bottomMargin, leftMargin, rightMargin]
+
+  }
 
 export async function createDocxFile(currentSettings : WritingPluginSettings, docxstyling: object,  body : string, destfilename : string, currentFile: TFile) {
     // get font and spacing from settings, set defaults if not entered
@@ -620,9 +646,9 @@ export async function createDocxFile(currentSettings : WritingPluginSettings, do
 
     const processor = unified()
       .use(remarkParse)
+      .use(remarkBreaks)
       .use(remarkCallout)
       .use(remarkGfm)
-      .use(remarkBreaks)
       .use(supersub)
 
 
@@ -644,13 +670,18 @@ export async function createDocxFile(currentSettings : WritingPluginSettings, do
           // levels:levelconfig,
           bulletLevels:bulletlevelconfig
         };
-
+    
+    // const sectionProperties : ISectionPropertiesOptions = {page: {margin: {left: 0}}};
+    // const sectionDefaults : ISectionOptions = {properties: sectionProperties};
+    // const sectionDefaults : ISectionOptions = {properties: {page: {margin: {left: convertInchesToTwip(-1)}}}};
+    const [topMargin, bottomMargin, leftMargin, rightMargin] = getPageProperties(docxstyling);
     (async () => {
       const docxBlob = await toDocx(
         doc,
         docxprops, // docxProps
         {
           // Pass plugins in sectionProps
+          properties: {page: {margin: {top: convertInchesToTwip(topMargin), left: convertInchesToTwip(leftMargin), right: convertInchesToTwip(rightMargin), bottom: convertInchesToTwip(bottomMargin)}}},
           plugins: [imagePlugin(), tablePlugin(
             tableConfig
           ), listPlugin(listDefaults), htmlPlugin()],

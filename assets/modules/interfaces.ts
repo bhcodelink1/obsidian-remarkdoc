@@ -4,6 +4,9 @@ export interface WritingPluginSettings {
 	docxFont: string;
 	docxSpacing: string; 
 	docxTableBorder: string;
+	cssFont: string; 
+	cssSpacing: string;
+	cssParaIndent: string;
 	}
 
 
