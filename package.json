@@ -17,6 +17,7 @@
 		"remark-gfm":"latest",
 		"remark-supersub":"latest",
 		"remark-breaks":"latest",
+		"rehype-raw":"latest",
 		"@m2d/core":"latest",
 		"@m2d/image":"latest",
 		"@m2d/table":"latest",

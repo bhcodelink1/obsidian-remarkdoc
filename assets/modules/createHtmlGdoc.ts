@@ -6,7 +6,7 @@ import {unified} from 'unified'
 
 import remarkParse from "remark-parse";
 
-
+import rehypeRaw from 'rehype-raw';
 import remarkRehype from 'remark-rehype';
 import rehypeStringify from 'rehype-stringify';
 import rehypeDocument from 'rehype-document';
@@ -22,16 +22,22 @@ import juice from "juice";
 	export async function createGdocFile(filename : string, csscontent : string, body : string, destfilename : string, currentFile: TFile) {
 		const processor = unified()
 		.use(remarkParse)
-		.use(remarkCallout)
 		.use(remarkBreaks)
+		.use(remarkCallout)
 		.use(supersub)
 		.use(remarkGfm)
-		.use(remarkRehype)
+		// .use(remarkRehype)
+		.use(remarkRehype, { allowDangerousHtml: true })
+		// Use rehype-raw *after* remark-rehype to parse the raw HTML nodes in the mdast
+		.use(rehypeRaw)
 		.use(rehypeStringify)
 		.use(rehypeDocument, {title: filename, style: csscontent})
 
 
-		const bodyclean = await convertWikiToMarkdownPdf(body, currentFile)
+		var bodyclean = await convertWikiToMarkdownPdf(body, currentFile)
+		const regex = /(?!<^#.*)\n(?=[\n])/g;
+    	const replacement = "\n<p></p>\n"
+		bodyclean = bodyclean.replace(regex, replacement);
 
 		const doc = await processor.process(bodyclean);
 

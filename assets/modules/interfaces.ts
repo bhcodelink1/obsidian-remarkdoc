@@ -7,6 +7,11 @@ export interface WritingPluginSettings {
 	cssFont: string; 
 	cssSpacing: string;
 	cssParaIndent: string;
+	gdoccssFont: string; 
+	gdoccssSpacing: string;
+	gdoccssParaIndent: string;
+	gdoccssFile: string;
+
 	}
 
 

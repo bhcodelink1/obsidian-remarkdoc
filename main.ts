@@ -101,7 +101,7 @@ export default class MyPlugin extends Plugin {
 		if (frontmatteryaml!=null){
 
 
-			if ('docxfilename' in frontmatteryaml){
+			if (('docxfilename' in frontmatteryaml) && (this.app.vault.getFileByPath(frontmatteryaml['docxfilename']))) {
 				destfilename = frontmatteryaml['docxfilename']
 
 				await createDocxFile(currentSettings, docxstyling, body, destfilename, currentFile) 
@@ -164,17 +164,28 @@ export default class MyPlugin extends Plugin {
 		body = body.replace(dividertext, "")
 
 		var exportCssFilename = ''
-		console.log("exportCSSFilename set")
+		console.log("exportCSSFilename is blank")
 
 		if ((this.settings.cssFile!='') && (this.settings.cssFile)){
+			// look for this file, if present then use
+			const filepath : string = this.settings.cssFile
+			const cssfileexists: TFile | null = this.app.vault.getFileByPath(filepath);
+			if (cssfileexists){
 			exportCssFilename = this.settings.cssFile
-			console.log("settings css set")
+			console.log("settings file exists and used")
+			}
 		}
+		
 
 		
 		if ((fmc) && ("pdfcss" in fmc)){
+			// look for this file, if present then use
+			const filepathfmc : string = fmc['pdfcss'];
+			const cssfileexistsfmc: TFile | null = this.app.vault.getFileByPath(filepathfmc);
+			if (cssfileexistsfmc){
 			exportCssFilename = fmc['pdfcss']
-			console.log("frontmatter css set")
+			console.log("frontmatter css used")
+			}
 		} 
 
 
@@ -202,6 +213,10 @@ export default class MyPlugin extends Plugin {
 	}
 
 	async markdownToGdocHtml(editor: Editor) {
+		// update csscontent
+		// to do this, update settings
+		// get info from settings like above
+		
 
 		const file = this.app.workspace.getActiveFile();
 
@@ -220,13 +235,21 @@ export default class MyPlugin extends Plugin {
 		body = body.replace(dividertext, "")
 		var exportCssFilename = ''
 
-		if ((this.settings.cssFile!='') && (this.settings.cssFile)){
-			exportCssFilename = this.settings.cssFile
+		if ((this.settings.gdoccssFile!='') && (this.settings.gdoccssFile)){
+			const filepath : string = this.settings.gdoccssFile
+			const cssfileexists: TFile | null = this.app.vault.getFileByPath(filepath);
+			if (cssfileexists){
+				exportCssFilename = this.settings.gdoccssFile
+			}
 		}
 
 
 		if ((fmc) && ("gdoccss" in fmc)){
-			exportCssFilename = fmc['gdoccss']
+			const filepathfmc : string = fmc['gdoccss'];
+			const cssfileexistsfmc: TFile | null = this.app.vault.getFileByPath(filepathfmc);
+			if (cssfileexistsfmc){
+				exportCssFilename = fmc['gdoccss']
+			}
 		} 
 
 
@@ -235,11 +258,15 @@ export default class MyPlugin extends Plugin {
 		const basefilename = path.replace(/\.[^/.]+$/, "")
 		const destfilename = basefilename + '-googledoc.html'
 
+		const gdoccssFont = this.settings.gdoccssFont
+		const gdoccssSpacing = this.settings.gdoccssSpacing
+		const gdoccssParaIndent = this.settings.gdoccssParaIndent
+		console.log('the spacing for gdoc from settings is: ' + gdoccssSpacing)
 		var csscontent = ''
 		if (exportCssFilename!='') {
-			csscontent = await getFileFromPath(exportCssFilename) ?? getDefaultGdocCss()
+			csscontent = await getFileFromPath(exportCssFilename) ?? getDefaultGdocCss(gdoccssFont, gdoccssSpacing, gdoccssParaIndent)
 		} else {
-			csscontent = getDefaultGdocCss()
+			csscontent = getDefaultGdocCss(gdoccssFont, gdoccssSpacing, gdoccssParaIndent)
 		}
 
 		await createGdocFile(filename, csscontent, body, destfilename, file)

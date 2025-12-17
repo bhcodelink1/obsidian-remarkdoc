@@ -29,7 +29,6 @@ import type { IListPluginOptions } from "@m2d/list"
 
 
 function defineTextStyle(currentSettings: WritingPluginSettings, docxstyling: object, formatType: string, defaultFontSize:number): [string, number, number, boolean, boolean]  {
-        // handle missing value ie ''
       var documentfont = "Palatino Linotype"
         if (currentSettings.docxFont) {
             if (currentSettings.docxFont!=''){
@@ -76,7 +75,6 @@ function defineTextStyle(currentSettings: WritingPluginSettings, docxstyling: ob
 }
 
 
-// function setDocumentConfig (documentfont : string, lineSpacing : number) {
 function setDocumentConfig (currentSettings: WritingPluginSettings, docxstyling: object) {
 
 
@@ -361,12 +359,7 @@ function setDocumentConfig (currentSettings: WritingPluginSettings, docxstyling:
   return docxprops
 }
 
-// function setTableConfig (tableFont : string, tableFontSize: number,  tableHeaderColor: string, lineSpacing : number, borderColor: string) {
-
 function setTableConfig (currentSettings: WritingPluginSettings, docxstyling : object) {
-  //get settings defaults
-  // get body settings as secondary defaults
-    // handle missing value ie ''
 
   var tableHeaderColor = "#ffffff";
   var tableFontSize = 18; 
@@ -449,9 +442,7 @@ function setTableConfig (currentSettings: WritingPluginSettings, docxstyling : o
   const firstRowCellProperties : IFirstRowCellProps = {
               shading: { type: ShadingType.SOLID,fill:tableHeaderColor },
               data: {
-                    // alignment: "center",
                     bold: true,
-              //       color: "#000000",
                     size: tableFontSize, 
                     font: tableFont,
                   }
@@ -462,14 +453,11 @@ function setTableConfig (currentSettings: WritingPluginSettings, docxstyling : o
                 defaultVerticalAlign: VerticalAlign.CENTER,
                 preferMdData: true,
               };
-// can header be set to false?
-  // const tableRowProperties : RowProps = {}
-  // const firstRowProperties : RowProps = {}
+
 
     
   const tableConfig  = {
           tableProps: tableProperties,
-          // rowProps : tableRowProperties,
           cellProps : cellProperties, 
           firstRowCellProps: firstRowCellProperties,
           alignments: tableAlignments
@@ -479,15 +467,8 @@ function setTableConfig (currentSettings: WritingPluginSettings, docxstyling : o
 }
 
 
-// set in the config functions
-// font, size, and spacing vars - eventually indent
-// in table config also shading
-// another function to check settings, then frontmatter, and if neither, default
+
 function setBulletsConfig(currentSettings: WritingPluginSettings, docxstyling:object) {
-  //get settings defaults
-  // get body settings as secondary defaults
-  // handle missing value ie ''
-  // fontName: string, initialFontSize: number, indentIncrement: number
   var fontName = 'Palatino Linotype';
   var initialFontSize = 12;
   var initialIndent = 0;
@@ -528,9 +509,7 @@ function setBulletsConfig(currentSettings: WritingPluginSettings, docxstyling:ob
                 },
           paragraph: {
             indent: {left: convertInchesToTwip( initialIndent)}
-            // spacing: {
-            //   line: 240
-            // }
+
           }
           }
         },
@@ -545,9 +524,7 @@ function setBulletsConfig(currentSettings: WritingPluginSettings, docxstyling:ob
                 },
           paragraph: {
             indent: {left: convertInchesToTwip( initialIndent+ (1 * indentIncrement))}
-            // spacing: {
-            //   line: 240
-            // }
+
           }
           }
         },
@@ -562,9 +539,7 @@ function setBulletsConfig(currentSettings: WritingPluginSettings, docxstyling:ob
                 },
           paragraph: {
             indent: {left: convertInchesToTwip( initialIndent+ (2 * indentIncrement))}
-            // spacing: {
-            //   line: 240
-            // }
+
           }
           }
         },
@@ -579,9 +554,7 @@ function setBulletsConfig(currentSettings: WritingPluginSettings, docxstyling:ob
                   },
             paragraph: {
               indent: {left: convertInchesToTwip( initialIndent+ (3 * indentIncrement))}
-              // spacing: {
-              //   line: 240
-              // }
+
             }
           }
       },
@@ -596,9 +569,7 @@ function setBulletsConfig(currentSettings: WritingPluginSettings, docxstyling:ob
                 },
           paragraph: {
             indent: {left: convertInchesToTwip( initialIndent+ (4 * indentIncrement))}
-            // spacing: {
-            //   line: 240
-            // }
+
           }
           }
       }]
@@ -635,11 +606,7 @@ function getPageProperties(docxstyling: object): [number, number, number, number
   }
 
 export async function createDocxFile(currentSettings : WritingPluginSettings, docxstyling: object,  body : string, destfilename : string, currentFile: TFile) {
-    // get font and spacing from settings, set defaults if not entered
-    
-    
 
-    // const docxprops = setDocumentConfig(documentfont, lineSpacing)
     const docxprops = setDocumentConfig(currentSettings, docxstyling)
     
     
@@ -654,33 +621,37 @@ export async function createDocxFile(currentSettings : WritingPluginSettings, do
 
 
 
-    const bodyclean = convertWikiToMarkdown(body, currentFile)
+    var bodyclean = convertWikiToMarkdown(body, currentFile)
+    // const regex = /\n(?=[\n\w\d*])/g;
+    // const replacement = '\\\n';
+    const regex = /(?!<^#.*)\n(?=[\n])/g;
+    const replacement = "<br>\n"
+    // const regexblanklines = /(?=\n)^$/g;
+    // const replaceblanklines = "  ~~";
+    // const regex = /^  ~~$/gm;
+    // const replacement = "\\";
+
+
+    // bodyclean = bodyclean.replace(regexblanklines, replaceblanklines);
+    bodyclean = bodyclean.replace(regex, replacement);
+  
 		const doc = await processor.parse(bodyclean);
 
-    // const doc = await processor.parse(body);
 
-
-
-    // const tableConfig = setTableConfig (tableFont, tableFontSize, tableHeaderColor , lineSpacing, borderColor);
     const tableConfig = setTableConfig(currentSettings, docxstyling);
 
     const bulletlevelconfig = setBulletsConfig(currentSettings, docxstyling);
 
     const listDefaults : IListPluginOptions = {
-          // levels:levelconfig,
           bulletLevels:bulletlevelconfig
         };
     
-    // const sectionProperties : ISectionPropertiesOptions = {page: {margin: {left: 0}}};
-    // const sectionDefaults : ISectionOptions = {properties: sectionProperties};
-    // const sectionDefaults : ISectionOptions = {properties: {page: {margin: {left: convertInchesToTwip(-1)}}}};
     const [topMargin, bottomMargin, leftMargin, rightMargin] = getPageProperties(docxstyling);
     (async () => {
       const docxBlob = await toDocx(
         doc,
         docxprops, // docxProps
         {
-          // Pass plugins in sectionProps
           properties: {page: {margin: {top: convertInchesToTwip(topMargin), left: convertInchesToTwip(leftMargin), right: convertInchesToTwip(rightMargin), bottom: convertInchesToTwip(bottomMargin)}}},
           plugins: [imagePlugin(), tablePlugin(
             tableConfig
@@ -703,9 +674,6 @@ export async function createDocxFile(currentSettings : WritingPluginSettings, do
 
                   });
                 }
-
-
-
 
     })();
 

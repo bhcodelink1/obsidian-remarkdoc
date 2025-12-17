@@ -16,7 +16,11 @@ export class WritingSettingTab extends PluginSettingTab {
 
 		containerEl.empty();
 
-		containerEl.createEl('h1', {text: 'Settings for the writing plugin.'});
+		containerEl.createEl('h1', {text: 'Settings for exporting the markdown file.'});
+
+		containerEl.createEl('h3', {text: 'Pdf export settings.'});
+
+		containerEl.createEl('h4', {text: 'Default settings across pdf exports.'});
 
 		new Setting(containerEl)
 			.setName('Font to use in pdf html export')
@@ -36,8 +40,8 @@ export class WritingSettingTab extends PluginSettingTab {
 				.setDesc('Global spacing setting for exports to pdf ready html.')
 				.addDropdown((dropdown) => {
 					dropdown
-					.addOption("1", "single spaced")
-					.addOption("2", "double spaced")
+					.addOption("100%", "single spaced")
+					.addOption("200%", "double spaced")
 					.setValue(this.plugin.settings.cssSpacing)
 					.onChange(async (value) => {
 							console.log('Default pdf spacing: ' + value);
@@ -61,7 +65,7 @@ export class WritingSettingTab extends PluginSettingTab {
 				});
 				});
 		
-
+		containerEl.createEl('h4', {text: 'Alternatively, set a default css file to use for pdf exports.'});
 		new Setting(containerEl)
 			.setName('Default css file for pdf conversion to use')
 			.setDesc('File within Vault that will be used as default css definition for pdf conversion.')
@@ -73,7 +77,68 @@ export class WritingSettingTab extends PluginSettingTab {
 					this.plugin.settings.cssFile = value;
 					await this.plugin.saveSettings();
 				}));
+
+		containerEl.createEl('h3', {text: 'Google Doc export settings.'});
+
+		containerEl.createEl('h4', {text: 'Default settings across Google Doc exports.'});
+
+		new Setting(containerEl)
+			.setName('Font to use in gdoc html export')
+			.setDesc('Global font setting for exports to gdoc ready html.')
+			.addText(text => text
+				.setPlaceholder('Arial')
+				.setValue(this.plugin.settings.gdoccssFont)
+				.onChange(async (value) => {
+					console.log('Default gdoc font: ' + value);
+					this.plugin.settings.gdoccssFont = value;
+					await this.plugin.saveSettings();
+				}));
 		
+				
+		new Setting(containerEl)
+				.setName('Spacing to use in gdoc html export')
+				.setDesc('Global spacing setting for exports to gdoc ready html.')
+				.addDropdown((dropdown) => {
+					dropdown
+					.addOption("100%", "single spaced")
+					.addOption("200%", "double spaced")
+					.setValue(this.plugin.settings.gdoccssSpacing)
+					.onChange(async (value) => {
+							console.log('Default gdoc spacing: ' + value);
+							this.plugin.settings.gdoccssSpacing = value;
+							await this.plugin.saveSettings();
+				});
+				});
+
+		new Setting(containerEl)
+				.setName('Paragraph indent to use in gdoc html export')
+				.setDesc('Global indent setting for new paragraphs in exports to gdoc ready html.')
+				.addDropdown((dropdown) => {
+					dropdown
+					.addOption("0", "None")
+					.addOption("1", "One tab")
+					.setValue(this.plugin.settings.gdoccssParaIndent)
+					.onChange(async (value) => {
+							console.log('Default gdoc indent: ' + value);
+							this.plugin.settings.gdoccssParaIndent = value;
+							await this.plugin.saveSettings();
+				});
+				});
+		
+		containerEl.createEl('h4', {text: 'Alternatively, set a default css file to use for gdoc exports.'});
+		new Setting(containerEl)
+			.setName('Default css file for gdoc conversion to use')
+			.setDesc('File within Vault that will be used as default css definition for gdoc conversion.')
+			.addText(text => text
+				.setPlaceholder('default.css')
+				.setValue(this.plugin.settings.gdoccssFile)
+				.onChange(async (value) => {
+					console.log('Default gdoc css style: ' + value);
+					this.plugin.settings.gdoccssFile = value;
+					await this.plugin.saveSettings();
+				}));
+		
+		containerEl.createEl('h3', {text: 'Docx export settings.'});
 		
 		new Setting(containerEl)
 			.setName('Font to use in docx export')
