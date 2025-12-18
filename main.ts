@@ -7,14 +7,20 @@ import {docxModal} from './assets/modules/filenameModal'
 import {WritingSettingTab} from './assets/modules/writingSettingsClass';
 import {WritingPluginSettings} from './assets/modules/interfaces';
 
-// Remember to rename these classes and interfaces!
-
 
 
 const DEFAULT_SETTINGS: WritingPluginSettings = {
 	docxFont: '',
 	docxSpacing: '',
-	cssFile:''
+	cssFile:'',
+	docxTableBorder: '',
+	cssFont: '', 
+	cssSpacing: '',
+	cssParaIndent: '',
+	gdoccssFont: '',
+	gdoccssSpacing: '',
+	gdoccssParaIndent: '',
+	gdoccssFile: ''
 }
 
 
@@ -25,7 +31,6 @@ export default class MyPlugin extends Plugin {
 	async onload() {
 		await this.loadSettings();
 
-		// This adds a settings tab 
 		this.addSettingTab(new WritingSettingTab(this.app, this));
 
 
@@ -93,9 +98,6 @@ export default class MyPlugin extends Plugin {
 			var docxstyling : object = {}
 		}
 		
-		  
-
-		// if front matter exists - get that 
 		var destfilename = 'export.docx'
 
 		if (frontmatteryaml!=null){
@@ -110,7 +112,6 @@ export default class MyPlugin extends Plugin {
 				let noticestring = 'adding a frontmatter property "docxfilename" and a filename.'
 				new Notice(noticestring);
 				new docxModal(this.app, (result) => {
-					console.log(result)
 					destfilename = result;
 					const file = this.app.workspace.getActiveFile();
 					if (file){
@@ -129,7 +130,6 @@ export default class MyPlugin extends Plugin {
 			new Notice(noticestring);
 			
 			new docxModal(this.app, (result) => {
-				console.log(result)
 				destfilename = result;
 				const file = this.app.workspace.getActiveFile();
 				if (file){
@@ -146,7 +146,6 @@ export default class MyPlugin extends Plugin {
 
 	async markdownToPdf(editor: Editor) {
 		
-		console.log("function loaded")
 		const file = this.app.workspace.getActiveFile();
 
 		var fulldoc = editor.getDoc().getValue();
@@ -164,27 +163,24 @@ export default class MyPlugin extends Plugin {
 		body = body.replace(dividertext, "")
 
 		var exportCssFilename = ''
-		console.log("exportCSSFilename is blank")
 
 		if ((this.settings.cssFile!='') && (this.settings.cssFile)){
-			// look for this file, if present then use
+
 			const filepath : string = this.settings.cssFile
 			const cssfileexists: TFile | null = this.app.vault.getFileByPath(filepath);
 			if (cssfileexists){
 			exportCssFilename = this.settings.cssFile
-			console.log("settings file exists and used")
 			}
 		}
 		
 
 		
 		if ((fmc) && ("pdfcss" in fmc)){
-			// look for this file, if present then use
+
 			const filepathfmc : string = fmc['pdfcss'];
 			const cssfileexistsfmc: TFile | null = this.app.vault.getFileByPath(filepathfmc);
 			if (cssfileexistsfmc){
 			exportCssFilename = fmc['pdfcss']
-			console.log("frontmatter css used")
 			}
 		} 
 
@@ -201,10 +197,8 @@ export default class MyPlugin extends Plugin {
 		var csscontent = ''
 		if (exportCssFilename!='') {
 			csscontent = await getFileFromPath(exportCssFilename) ?? getDefaultCss(cssFont, cssSpacing, cssParaIndent)
-			console.log("using exposrtcssfile value")
 		} else {
 			csscontent = getDefaultCss(cssFont, cssSpacing, cssParaIndent)
-			console.log("using default css value")
 		}
 
 		await createPdfFile(filename, csscontent, body, destfilename, file)
@@ -213,9 +207,6 @@ export default class MyPlugin extends Plugin {
 	}
 
 	async markdownToGdocHtml(editor: Editor) {
-		// update csscontent
-		// to do this, update settings
-		// get info from settings like above
 		
 
 		const file = this.app.workspace.getActiveFile();
@@ -261,7 +252,6 @@ export default class MyPlugin extends Plugin {
 		const gdoccssFont = this.settings.gdoccssFont
 		const gdoccssSpacing = this.settings.gdoccssSpacing
 		const gdoccssParaIndent = this.settings.gdoccssParaIndent
-		console.log('the spacing for gdoc from settings is: ' + gdoccssSpacing)
 		var csscontent = ''
 		if (exportCssFilename!='') {
 			csscontent = await getFileFromPath(exportCssFilename) ?? getDefaultGdocCss(gdoccssFont, gdoccssSpacing, gdoccssParaIndent)

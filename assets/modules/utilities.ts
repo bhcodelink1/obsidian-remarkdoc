@@ -3,7 +3,6 @@ import { TFile} from 'obsidian';
 
 
 export function convertWikiToMarkdown(text : string, currentFile: TFile) {
-  // Use a regular expression to find all wiki-style links
   return text.replace(/\[\[(.*?)\]\]/g, function(match, p1) {
 
 	  const embeddedFile = this.app.metadataCache.getFirstLinkpathDest(p1, currentFile)
@@ -96,7 +95,6 @@ export async function convertWikiToMarkdownPdf(
     lastIndex = index + fullMatch.length;
   }
 
-  // Add any remaining text after the last match
   result += text.slice(lastIndex);
 
   return result;
@@ -452,7 +450,7 @@ export function getDefaultGdocCss(cssFont:string, cssSpacing:string, cssParaInde
 		defaultParaIndent=cssParaIndent
 	}
 
-	console.log("The spacing set for googledoc is: " + defaultcsslinespacing)
+
 
 	let defaultCSS = `:root {
 	--textfont: ` + defaultcssFont + `;

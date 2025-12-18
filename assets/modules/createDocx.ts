@@ -622,17 +622,9 @@ export async function createDocxFile(currentSettings : WritingPluginSettings, do
 
 
     var bodyclean = convertWikiToMarkdown(body, currentFile)
-    // const regex = /\n(?=[\n\w\d*])/g;
-    // const replacement = '\\\n';
     const regex = /(?!<^#.*)\n(?=[\n])/g;
     const replacement = "<br>\n"
-    // const regexblanklines = /(?=\n)^$/g;
-    // const replaceblanklines = "  ~~";
-    // const regex = /^  ~~$/gm;
-    // const replacement = "\\";
 
-
-    // bodyclean = bodyclean.replace(regexblanklines, replaceblanklines);
     bodyclean = bodyclean.replace(regex, replacement);
   
 		const doc = await processor.parse(bodyclean);

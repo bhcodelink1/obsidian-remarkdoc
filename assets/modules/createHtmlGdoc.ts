@@ -26,9 +26,7 @@ import juice from "juice";
 		.use(remarkCallout)
 		.use(supersub)
 		.use(remarkGfm)
-		// .use(remarkRehype)
 		.use(remarkRehype, { allowDangerousHtml: true })
-		// Use rehype-raw *after* remark-rehype to parse the raw HTML nodes in the mdast
 		.use(rehypeRaw)
 		.use(rehypeStringify)
 		.use(rehypeDocument, {title: filename, style: csscontent})
