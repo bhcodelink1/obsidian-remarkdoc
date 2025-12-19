@@ -1,0 +1,260 @@
+:root {
+	--textfont: "Montserrat";
+/* 	--textfont: "Georgia"; */
+/* 	--textfont: "Baskerville"; */
+	--headerfont: "Montserrat";
+	--fontsizelargest: 15pt;
+	--fontsizelarge: 14pt;
+	--fontsizemedium: 13pt;
+	--fontsizeregular: 12pt;
+	--linespacing: 100%;
+	--headerindent: 0em;
+	--paragraphindent: 1cm; 
+	
+}
+
+
+
+@media print {
+
+@page :footer {
+        display: none
+    }
+ 
+@page :header {
+        display: none
+    }
+
+html {
+/*   font-family: var(--textfont);  */
+}
+
+.frontmatter {display: none}
+
+body {
+/* 
+  font-family:  var(--textfont); 
+  font-size: var(--fontsizeregular);
+  text-indent: var(--paragraphindent);
+ */
+}
+
+
+h1 {
+color : black;
+  font-family:  var(--headerfont); 
+  font-size: var(--fontsizelargest);
+  font-weight: bold ;
+  text-indent: var(--headerindent);
+
+}
+
+h2 {
+color : black;
+  font-family:  var(--headerfont); 
+  font-size: var(--fontsizelarge);
+  font-weight: bold ;
+  text-indent: var(--headerindent);
+
+}
+
+
+h3 {
+color : black;
+  font-family:  var(--headerfont); 
+  font-size: var(--fontsizemedium);
+  font-weight: italic ;
+  text-indent: var(--headerindent);
+
+}
+
+h4 {
+color : black;
+  font-family:  var(--headerfont); 
+  font-size: var(--fontsizeregular);
+  text-indent: var(--headerindent);
+
+}
+/* a ul li */
+
+ul {
+  font-family:  var(--textfont); 
+  font-size: var(--fontsizeregular);
+  text-indent: var(--headerindent);
+/* 
+  text-indent: 2em;
+  line-height: 2;
+ */
+}
+
+li {
+  font-family:  var(--textfont); 
+  font-size: var(--fontsizeregular);
+    color: black ;
+  text-indent: var(--headerindent);
+
+}
+
+li::before {
+    position: relative;  
+/*         width: 20px ;    */
+
+    color: black ;
+
+
+}
+
+
+li p {
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    display:inline;
+}
+
+ol li::before {
+    position: relative;  
+        width: 20px ;   
+
+    color: black ;
+
+
+}
+
+
+
+
+a {
+  font-family:  var(--textfont); 
+  font-size: var(--fontsizeregular);
+  color: black ;
+  line-height: var(--linespacing);
+}
+
+p {
+  font-family:  var(--textfont); 
+  font-size: var(--fontsizeregular);
+  line-height: var(--linespacing);
+  text-indent: var(--paragraphindent);
+
+
+}
+
+
+
+/* --------------------------------------------   */
+/* Latex table-layout:                            */
+/* --------------------------------------------   */
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+	width: auto;
+	/*max-width: 100%;*/
+	border-top: 2.27px solid black;
+	border-bottom: 2.27px solid black;
+	overflow-x: auto;	
+	box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+}
+th,
+td {
+	border: 0 none;
+	padding: 0.51rem;
+	line-height: 1.1;
+}
+table > tbody > tr:first-child > td,
+table > tbody > tr:first-child > th {
+	border-top: 1.36px solid black;
+}
+table > tbody > tr:last-child > td,
+table > tbody > tr:last-child > th {
+	border-bottom: 1.36px solid black;
+}
+thead th {
+    background-color: white ;
+    font-weight: 700;    
+    padding: 8px 9px 5px 9px;
+}
+tr:nth-child(even) {
+      background-color: #ebecf1 ;
+}
+tbody tr:hover td {
+	background-color: #f5f1da;
+}
+/* --------------------------------------------   */
+
+[data-callout] {
+		border-left: 4px solid #4a90e2;       /* accent bar */
+		background-color: #f5f8ff;            /* light blue background */
+		padding: 0.75rem 1rem;
+		margin: 1rem 0;
+		border-radius: 4px;
+		font-size: 0.95rem;
+		page-break-inside: avoid; 
+		text-indent: 0em;    
+		line-height:1;        /* better for PDF / printing */
+		}
+
+		/* The callout title: <div data-callout-title>Note</div> */
+		[data-callout] > [data-callout-title] {
+		font-weight: 600;
+		margin-bottom: 0.25rem;
+		display: flex;
+		align-items: center;
+		text-indent: 0em; 
+		line-height:1;
+		}
+
+		/* Optional: style the title text a bit differently */
+		[data-callout] > [data-callout-title]::before {
+		content: "ⓘ ";
+		margin-right: 0.25rem;
+		font-size: 1rem;
+		line-height:1;
+		}
+
+		/* The body: <div data-callout-body> ... </div> */
+		[data-callout] > [data-callout-body] {
+		margin: 0;
+		text-indent: 0em; 
+		line-height:1;
+		}
+
+		/* Remove extra margin on first/last elements inside the body */
+		[data-callout-body] > :first-child {
+		margin-top: 0;
+		text-indent: 0em; 
+		line-height:1;
+		}
+		[data-callout-body] > :last-child {
+		margin-bottom: 0;
+		text-indent: 0em; 
+		line-height:1;
+		}
+
+		/* Example: tweak styling based on data-callout-type */
+		[data-callout][data-callout-type="note"] {
+		border-left-color: #4a90e2;
+		background-color: #f5f8ff;
+		text-indent: 0em; 
+		line-height:1;
+		}
+
+		[data-callout][data-callout-type="warning"] {
+		border-left-color: #f5a623;
+		background-color: #fff8e6;
+		text-indent: 0em; 
+		line-height:1;
+		}
+
+		[data-callout][data-callout-type="tip"] {
+		border-left-color: #2ecc71;
+		background-color: #f2fff8;
+		text-indent: 0em; 
+		line-height:1;
+		}
+
+
+
+
+}
