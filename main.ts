@@ -103,7 +103,7 @@ export default class MyPlugin extends Plugin {
 		if (frontmatteryaml!=null){
 
 
-			if (('docxfilename' in frontmatteryaml) && (this.app.vault.getFileByPath(frontmatteryaml['docxfilename']))) {
+			if ('docxfilename' in frontmatteryaml) {
 				destfilename = frontmatteryaml['docxfilename']
 
 				await createDocxFile(currentSettings, docxstyling, body, destfilename, currentFile) 

@@ -440,7 +440,8 @@ function setTableConfig (currentSettings: WritingPluginSettings, docxstyling : o
             };
   
   const firstRowCellProperties : IFirstRowCellProps = {
-              shading: { type: ShadingType.SOLID,fill:tableHeaderColor },
+              // shading: { type: ShadingType.SOLID,fill:tableHeaderColor },
+              shading: { type: ShadingType.CLEAR,fill:tableHeaderColor},
               data: {
                     bold: true,
                     size: tableFontSize, 
