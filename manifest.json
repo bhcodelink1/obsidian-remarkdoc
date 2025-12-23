@@ -1,11 +1,11 @@
 {
-	"id": "remarkdoc-plugin",
+	"id": "obsidian-remarkdoc",
 	"name": "Document Exporter",
 	"version": "1.0.0",
 	"minAppVersion": "0.15.0",
-	"description": "Exporter from markdown to docx or pdf and google doc ready html",
+	"description": "Exporter from markdown to docx or pdf and google doc ready html.",
 	"author": "Codelink",
-	"authorUrl": "https://github.com/bhcodelink1/obsidian-remarkdoc",
-	"fundingUrl": "https://github.com/bhcodelink1/obsidian-remarkdoc",
+	"authorUrl": "",
+	"fundingUrl": "",
 	"isDesktopOnly": false
 }
