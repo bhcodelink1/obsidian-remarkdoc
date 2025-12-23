@@ -1,5 +1,5 @@
 {
-	"id": "obsidian-remarkdoc",
+	"id": "document-exporter",
 	"name": "Document Exporter",
 	"version": "1.0.1",
 	"minAppVersion": "0.15.0",
