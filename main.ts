@@ -24,7 +24,7 @@ const DEFAULT_SETTINGS: WritingPluginSettings = {
 }
 
 
-export default class MyPlugin extends Plugin {
+export default class DocumentExporterPlugin extends Plugin {
 	settings: WritingPluginSettings;
 
 
@@ -38,7 +38,13 @@ export default class MyPlugin extends Plugin {
 			id: "convert-docx",
 			name: "Convert the current document to a docx word file",
 			editorCallback: (editor: Editor, view: MarkdownView)  => {
+				// add await here?
 				this.markdownToDocx(editor)
+				.then()
+				.catch((error) => {
+                  // Catch any errors that escape the try-catch (shouldn't happen, but safety net)
+                  new Notice('An unexpected error occurred while creating the DOCX file');
+                })
 			},
 		  });
 
@@ -46,7 +52,13 @@ export default class MyPlugin extends Plugin {
 			id: "convert-pdf",
 			name: "Convert the current document to a pdf ready html file",
 			editorCallback: (editor: Editor, view: MarkdownView)  => {
+				// add await here?
 				this.markdownToPdf(editor)
+				.then()
+				.catch((error) => {
+                  // Catch any errors that escape the try-catch (shouldn't happen, but safety net)
+                  new Notice('An unexpected error occurred while creating the DOCX file');
+                })
 			},
 		});
 
@@ -54,7 +66,13 @@ export default class MyPlugin extends Plugin {
 			id: "convert-gdoc",
 			name: "Convert the current document to a gdoc ready html file",
 			editorCallback: (editor: Editor, view: MarkdownView)  => {
+				// add await here?
 				this.markdownToGdocHtml(editor)
+				.then()
+				.catch((error) => {
+                  // Catch any errors that escape the try-catch (shouldn't happen, but safety net)
+                  new Notice('An unexpected error occurred while creating the DOCX file');
+                })
 			},
 		});
 
@@ -78,66 +96,68 @@ export default class MyPlugin extends Plugin {
 
 		const currentFile: TFile | null = this.app.workspace.getActiveFile();
 
-		var fulldoc = editor.getDoc().getValue();
-		var frontmatter = getFrontMatterInfo(fulldoc)
-		var frontmattertext = frontmatter.frontmatter
-		var frontmatteryaml = parseYaml(frontmattertext)
-		var dividertext = "---"
+		let fulldoc = editor.getDoc().getValue();
+		let frontmatter = getFrontMatterInfo(fulldoc)
+		let frontmattertext = frontmatter.frontmatter
+		let frontmatteryaml = parseYaml(frontmattertext)
+		let dividertext = "---"
 
 
-		var body = fulldoc.replace(dividertext, "")
+		let body = fulldoc.replace(dividertext, "")
 		 body = body.replace(frontmattertext, "")
 		 body = body.replace(dividertext, "")
 
 
-		var currentSettings = this.settings
-
+		let currentSettings = this.settings
+		let docxstyling : object = {}
 		if ((frontmatteryaml) && ('docxstyling' in frontmatteryaml)){
-			var docxstyling : object = frontmatteryaml['docxstyling']
-		} else {
-			var docxstyling : object = {}
-		}
+			docxstyling  = frontmatteryaml['docxstyling']
+		} 
 		
-		var destfilename = 'export.docx'
+		let destfilename = 'export.docx'
 
 		if (frontmatteryaml!=null){
 
-
-			if ('docxfilename' in frontmatteryaml) {
+//fix line below
+			if (('docxfilename' in frontmatteryaml) && (frontmatteryaml['docxfilename']) && ((frontmatteryaml['docxfilename'].trim().length > 0) )) {
 				destfilename = frontmatteryaml['docxfilename']
 
 				await createDocxFile(currentSettings, docxstyling, body, destfilename, currentFile) 
 
 			} else {
-				let noticestring = 'adding a frontmatter property "docxfilename" and a filename.'
+				let noticestring = 'Adding a frontmatter property "docxfilename" with a filename.'
 				new Notice(noticestring);
 				new docxModal(this.app, (result) => {
 					destfilename = result;
 					const file = this.app.workspace.getActiveFile();
 					if (file){
+						// add await here somewhere?
 					this.app.fileManager.processFrontMatter(file, (frontmatter) => {
 						frontmatter['docxfilename'] = result;
 
 					createDocxFile(currentSettings,docxstyling, body, destfilename, currentFile) 
 					});
+					//
 				}
 				  }).open();
 				
 
 			}
 		} else {
-			let noticestring = 'adding a frontmatter property "docxfilename" and a filename.'
+			let noticestring = 'Adding a frontmatter property "docxfilename" with a filename.'
 			new Notice(noticestring);
 			
 			new docxModal(this.app, (result) => {
 				destfilename = result;
 				const file = this.app.workspace.getActiveFile();
 				if (file){
+					// add await here somewhere?
 				this.app.fileManager.processFrontMatter(file, (frontmatter) => {
 					frontmatter['docxfilename'] = result;
 
 				createDocxFile(currentSettings,docxstyling, body, destfilename, currentFile) 
 				});
+				///
 			}
 			  }).open();
 		}
@@ -148,21 +168,21 @@ export default class MyPlugin extends Plugin {
 		
 		const file = this.app.workspace.getActiveFile();
 
-		var fulldoc = editor.getDoc().getValue();
+		let fulldoc = editor.getDoc().getValue();
 
-		var dividertext = "---"
+		let dividertext = "---"
 
-		var frontmatter = getFrontMatterInfo(fulldoc)
-		var frontmattertext = frontmatter.frontmatter
-		var fmc = parseYaml(frontmattertext)
+		let frontmatter = getFrontMatterInfo(fulldoc)
+		let frontmattertext = frontmatter.frontmatter
+		let fmc = parseYaml(frontmattertext)
 
 		
 
-		var body = fulldoc.replace(dividertext, "")
+		let body = fulldoc.replace(dividertext, "")
 		body = body.replace(frontmattertext, "")
 		body = body.replace(dividertext, "")
 
-		var exportCssFilename = ''
+		let exportCssFilename = ''
 
 		if ((this.settings.cssFile!='') && (this.settings.cssFile)){
 
@@ -194,7 +214,7 @@ export default class MyPlugin extends Plugin {
 		const cssSpacing = this.settings.cssSpacing
 		const cssParaIndent = this.settings.cssParaIndent
 
-		var csscontent = ''
+		let csscontent = ''
 		if (exportCssFilename!='') {
 			csscontent = await getFileFromPath(exportCssFilename) ?? getDefaultCss(cssFont, cssSpacing, cssParaIndent)
 		} else {
@@ -211,20 +231,20 @@ export default class MyPlugin extends Plugin {
 
 		const file = this.app.workspace.getActiveFile();
 
-		var fulldoc = editor.getDoc().getValue();
+		let fulldoc = editor.getDoc().getValue();
 
-		var dividertext = "---"
+		let dividertext = "---"
 
-		var frontmatter = getFrontMatterInfo(fulldoc)
-		var frontmattertext = frontmatter.frontmatter
-		var fmc = parseYaml(frontmattertext)
+		let frontmatter = getFrontMatterInfo(fulldoc)
+		let frontmattertext = frontmatter.frontmatter
+		let fmc = parseYaml(frontmattertext)
 
 		
 
-		var body = fulldoc.replace(dividertext, "")
+		let body = fulldoc.replace(dividertext, "")
 		body = body.replace(frontmattertext, "")
 		body = body.replace(dividertext, "")
-		var exportCssFilename = ''
+		let exportCssFilename = ''
 
 		if ((this.settings.gdoccssFile!='') && (this.settings.gdoccssFile)){
 			const filepath : string = this.settings.gdoccssFile
@@ -252,7 +272,7 @@ export default class MyPlugin extends Plugin {
 		const gdoccssFont = this.settings.gdoccssFont
 		const gdoccssSpacing = this.settings.gdoccssSpacing
 		const gdoccssParaIndent = this.settings.gdoccssParaIndent
-		var csscontent = ''
+		let csscontent = ''
 		if (exportCssFilename!='') {
 			csscontent = await getFileFromPath(exportCssFilename) ?? getDefaultGdocCss(gdoccssFont, gdoccssSpacing, gdoccssParaIndent)
 		} else {

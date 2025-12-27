@@ -1,4 +1,4 @@
-import { TFile} from 'obsidian';
+import { TFile, App} from 'obsidian';
 
 
 
@@ -8,7 +8,7 @@ export function convertWikiToMarkdown(text : string, currentFile: TFile) {
 	  const embeddedFile = this.app.metadataCache.getFirstLinkpathDest(p1, currentFile)
 
 	  let imagefilepath: string | undefined
-	  var plencode = ""
+	  let plencode = ""
 	  if(embeddedFile) {
 		  imagefilepath = this.app.vault.getResourcePath(embeddedFile)
 		  
@@ -45,7 +45,7 @@ async function shrinkPng(arrayBuffer: ArrayBuffer, maxWidth = 800) {
 
 
 export async function convertWikiToMarkdownPdf(
-	this: any,
+  this: { app: App },
   text: string,
   currentFile: TFile
 ): Promise<string> {
@@ -120,7 +120,7 @@ export async function getFileFromPath(filepathstring: string) {
 
 		const filepath = this.app.vault.getAbstractFileByPath(filepathstring)
 
-		var filecontents : string = ""
+		let filecontents : string = ""
 		if (!filepath) {
 
 			return;
@@ -134,9 +134,9 @@ export async function getFileFromPath(filepathstring: string) {
 
 	}
 
-export function getFrontmatterAndBody(file:TFile, body:string) : [any, string] {
-	var fmc = this.app.metadataCache.getFileCache(file)?.frontmatter;
-	var outputfmc: any;
+export function getFrontmatterAndBody(file:TFile, body:string) : [object, string] {
+	let fmc = this.app.metadataCache.getFileCache(file)?.frontmatter;
+	let outputfmc: object;
 	if(fmc){
 		let end = fmc.position.end.line + 1 
 		body = body.split("\n").slice(end).join("\n")
@@ -154,9 +154,9 @@ export function getFrontmatterAndBody(file:TFile, body:string) : [any, string] {
 
 
 export function getDefaultCss(cssFont:string, cssSpacing:string, cssParaIndent:string) : string {
-	var defaultcssFont = "\"Palatino Linotype\""
-	var defaultcsslinespacing = "100%"
-	var defaultParaIndent = "0"
+	let defaultcssFont = "\"Palatino Linotype\""
+	let defaultcsslinespacing = "100%"
+	let defaultParaIndent = "0"
 
 	if (cssFont!='') {
 		defaultcssFont=cssFont
@@ -434,9 +434,9 @@ export function getDefaultCss(cssFont:string, cssSpacing:string, cssParaIndent:s
 
 
 export function getDefaultGdocCss(cssFont:string, cssSpacing:string, cssParaIndent:string) : string {
-	var defaultcssFont = "\"Arial\""
-	var defaultcsslinespacing = "100%"
-	var defaultParaIndent = "0"
+	let defaultcssFont = "\"Arial\""
+	let defaultcsslinespacing = "100%"
+	let defaultParaIndent = "0"
 
 	if (cssFont!='') {
 		defaultcssFont=cssFont

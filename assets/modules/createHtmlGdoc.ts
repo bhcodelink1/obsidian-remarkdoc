@@ -32,21 +32,21 @@ import juice from "juice";
 		.use(rehypeDocument, {title: filename, style: csscontent})
 
 
-		var bodyclean = await convertWikiToMarkdownPdf(body, currentFile)
+		let bodyclean = await convertWikiToMarkdownPdf(body, currentFile)
 		const regex = /(?!<^#.*)\n(?=[\n])/g;
     	const replacement = "\n<p></p>\n"
 		bodyclean = bodyclean.replace(regex, replacement);
 
 		const doc = await processor.process(bodyclean);
 
-		var doctext:string  = String(doc);
+		let doctext:string  = String(doc);
 
 		const inlined = juice(doctext);
 
 		this.app.vault.create( destfilename,  inlined);
 
 
-		let noticestring = 'File ' + destfilename + ' was created as an html file and added to vault'
+		let noticestring = 'The file ' + destfilename + ' was created as an html file and added to vault.'
 		new Notice(noticestring);
 
 

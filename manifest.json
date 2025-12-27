@@ -1,7 +1,7 @@
 {
 	"id": "document-exporter",
 	"name": "Document Exporter",
-	"version": "1.0.2",
+	"version": "1.0.3",
 	"minAppVersion": "0.15.0",
 	"description": "Exporter from markdown to docx or pdf and google doc ready html.",
 	"author": "Codelink",

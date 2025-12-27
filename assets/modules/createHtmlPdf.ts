@@ -32,17 +32,17 @@ import remarkBreaks from 'remark-breaks'
 		.use(rehypeDocument, {title: filename, style: csscontent, js: "https://unpkg.com/pagedjs/dist/paged.polyfill.js"})
 
 
-		const bodyclean = await convertWikiToMarkdownPdf(body, currentFile)
+		let bodyclean = await convertWikiToMarkdownPdf(body, currentFile)
 
 		const doc = await processor.process(bodyclean);
 
-		var doctext:string  = String(doc);
+		let doctext:string  = String(doc);
 
 
 		this.app.vault.create( destfilename,  doctext);
 
 
-		let noticestring = 'File ' + destfilename + ' was created as an html file and added to vault'
+		let noticestring = 'The file ' + destfilename + ' was created as an html file and added to vault.'
 		new Notice(noticestring);
 
 

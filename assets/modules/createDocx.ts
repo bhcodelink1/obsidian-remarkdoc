@@ -29,14 +29,14 @@ import type { IListPluginOptions } from "@m2d/list"
 
 
 function defineTextStyle(currentSettings: WritingPluginSettings, docxstyling: object, formatType: string, defaultFontSize:number): [string, number, number, boolean, boolean]  {
-      var documentfont = "Palatino Linotype"
+      let documentfont = "Palatino Linotype"
         if (currentSettings.docxFont) {
             if (currentSettings.docxFont!=''){
               documentfont=currentSettings.docxFont
             }
           }
 
-        var lineSpacing = 240
+        let lineSpacing = 240
         if (currentSettings.docxSpacing) {
           if (currentSettings.docxSpacing!=''){
             let spacingnum = Number(currentSettings.docxSpacing);
@@ -45,10 +45,10 @@ function defineTextStyle(currentSettings: WritingPluginSettings, docxstyling: ob
           }
         }
 
-        var smallCaps = false
-        var allCaps = false
+        let smallCaps = false
+        let allCaps = false
 
-        var fontSize = defaultFontSize*2
+        let fontSize = defaultFontSize*2
         if (formatType in docxstyling){
           const formatStyle = docxstyling[formatType]
           if ('font' in formatStyle){
@@ -361,11 +361,11 @@ function setDocumentConfig (currentSettings: WritingPluginSettings, docxstyling:
 
 function setTableConfig (currentSettings: WritingPluginSettings, docxstyling : object) {
 
-  var tableHeaderColor = "#ffffff";
-  var tableFontSize = 18; 
-  var tableFont = "Gill Sans MT";
-  var borderColor =  "#000000"; 
-  var lineSpacing = 240
+  let tableHeaderColor = "#ffffff";
+  let tableFontSize = 18; 
+  let tableFont = "Gill Sans MT";
+  let borderColor =  "#000000"; 
+  let lineSpacing = 240
 
 
         if (currentSettings.docxFont) {
@@ -470,10 +470,10 @@ function setTableConfig (currentSettings: WritingPluginSettings, docxstyling : o
 
 
 function setBulletsConfig(currentSettings: WritingPluginSettings, docxstyling:object) {
-  var fontName = 'Palatino Linotype';
-  var initialFontSize = 12;
-  var initialIndent = 0;
-  var indentIncrement = 0.25
+  let fontName = 'Palatino Linotype';
+  let initialFontSize = 12;
+  let initialIndent = 0;
+  let indentIncrement = 0.25
 
 
   if (currentSettings.docxFont) {
@@ -580,10 +580,10 @@ return bulletsLevelsConfig
 }
 
 function getPageProperties(docxstyling: object): [number, number, number, number] {
-    var topMargin = 1;
-    var bottomMargin = 1;
-    var leftMargin = 1;
-    var rightMargin = 1;
+    let topMargin = 1;
+    let bottomMargin = 1;
+    let leftMargin = 1;
+    let rightMargin = 1;
 
     if ('margin' in docxstyling){
             const margins = docxstyling['margin']
@@ -622,13 +622,13 @@ export async function createDocxFile(currentSettings : WritingPluginSettings, do
 
 
 
-    var bodyclean = convertWikiToMarkdown(body, currentFile)
+    let bodyclean = convertWikiToMarkdown(body, currentFile)
     const regex = /(?!<^#.*)\n(?=[\n])/g;
     const replacement = "<br>\n"
 
     bodyclean = bodyclean.replace(regex, replacement);
   
-		const doc = await processor.parse(bodyclean);
+		const doc = processor.parse(bodyclean);
 
 
     const tableConfig = setTableConfig(currentSettings, docxstyling);
@@ -640,6 +640,7 @@ export async function createDocxFile(currentSettings : WritingPluginSettings, do
         };
     
     const [topMargin, bottomMargin, leftMargin, rightMargin] = getPageProperties(docxstyling);
+    // "Promises must be awaited, end with a call to .catch, end with a call to .then with a rejection handler or be explicitly marked as ignored with the void operator."
     (async () => {
       const docxBlob = await toDocx(
         doc,
@@ -653,7 +654,7 @@ export async function createDocxFile(currentSettings : WritingPluginSettings, do
       );
       
         if (await this.app.vault.exists(destfilename) ){
-                  new Notice("ERROR: there is already a file with the specified filename.")
+                  new Notice("There is already a file with the specified filename.")
                 } else {
 
                   const buffer = await docxBlob.arrayBuffer()
@@ -661,14 +662,22 @@ export async function createDocxFile(currentSettings : WritingPluginSettings, do
                   .then((bufftext)=>{
 
                       this.app.vault.createBinary(destfilename ,  bufftext);
-                      let noticestring = 'File ' + destfilename + ' was created as a word file and added to vault'
+                      let noticestring = 'The file ' + destfilename + ' was created as a word file and added to vault.'
                       new Notice(noticestring);
                   
 
-                  });
+                  })
+                  .catch((error) => {
+                  // Catch any errors that escape the try-catch (shouldn't happen, but safety net)
+                  new Notice('An unexpected error occurred while creating the DOCX file.');
+                })
+                                  
+                  
+                  ;
                 }
 
     })();
+    // end section
 
 
 
