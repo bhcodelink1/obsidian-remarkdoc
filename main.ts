@@ -42,7 +42,7 @@ export default class DocumentExporterPlugin extends Plugin {
 				this.markdownToDocx(editor)
 				.then()
 				.catch((error) => {
-                  // Catch any errors that escape the try-catch (shouldn't happen, but safety net)
+				  // /skip this is the appropriate text for the notice
                   new Notice('An unexpected error occurred while creating the DOCX file');
                 })
 			},
@@ -56,7 +56,7 @@ export default class DocumentExporterPlugin extends Plugin {
 				this.markdownToPdf(editor)
 				.then()
 				.catch((error) => {
-                  // Catch any errors that escape the try-catch (shouldn't happen, but safety net)
+                 // /skip this is the appropriate text for the notice
                   new Notice('An unexpected error occurred while creating the DOCX file');
                 })
 			},
@@ -70,7 +70,7 @@ export default class DocumentExporterPlugin extends Plugin {
 				this.markdownToGdocHtml(editor)
 				.then()
 				.catch((error) => {
-                  // Catch any errors that escape the try-catch (shouldn't happen, but safety net)
+                 // /skip this is the appropriate text for the notice
                   new Notice('An unexpected error occurred while creating the DOCX file');
                 })
 			},
@@ -126,16 +126,22 @@ export default class DocumentExporterPlugin extends Plugin {
 
 			} else {
 				let noticestring = 'Adding a frontmatter property "docxfilename" with a filename.'
+				// /skip this is the appropriate text for the notice
 				new Notice(noticestring);
 				new docxModal(this.app, (result) => {
 					destfilename = result;
 					const file = this.app.workspace.getActiveFile();
 					if (file){
-						// add await here somewhere?
+						// /skip - a .then and .catch block is present
 					this.app.fileManager.processFrontMatter(file, (frontmatter) => {
 						frontmatter['docxfilename'] = result;
 
-					createDocxFile(currentSettings,docxstyling, body, destfilename, currentFile) 
+					  createDocxFile(currentSettings,docxstyling, body, destfilename, currentFile) 
+					  	.then()
+						.catch((error) => {
+						// /skip this is the appropriate text for the notice
+						new Notice('An unexpected error occurred while creating the DOCX file');
+						})
 					});
 					//
 				}
@@ -145,17 +151,23 @@ export default class DocumentExporterPlugin extends Plugin {
 			}
 		} else {
 			let noticestring = 'Adding a frontmatter property "docxfilename" with a filename.'
+			// /skip this is the appropriate text for the notice
 			new Notice(noticestring);
 			
 			new docxModal(this.app, (result) => {
 				destfilename = result;
 				const file = this.app.workspace.getActiveFile();
 				if (file){
-					// add await here somewhere?
+				// /skip - await is added to createDocxFile and no need for a .then and .catch block is present
 				this.app.fileManager.processFrontMatter(file, (frontmatter) => {
 					frontmatter['docxfilename'] = result;
-
-				createDocxFile(currentSettings,docxstyling, body, destfilename, currentFile) 
+				// /skip - await is added to createDocxFile and no need for a .then and .catch block is present
+				  createDocxFile(currentSettings,docxstyling, body, destfilename, currentFile) 
+				  		.then()
+						.catch((error) => {
+						// /skip this is the appropriate text for the notice
+						new Notice('An unexpected error occurred while creating the DOCX file');
+						})
 				});
 				///
 			}

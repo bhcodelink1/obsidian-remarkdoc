@@ -47,6 +47,7 @@ import juice from "juice";
 
 
 		let noticestring = 'The file ' + destfilename + ' was created as an html file and added to vault.'
+		// /skip this is the appropriate text for the notice
 		new Notice(noticestring);
 
 

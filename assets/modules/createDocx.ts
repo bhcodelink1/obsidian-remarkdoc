@@ -640,7 +640,7 @@ export async function createDocxFile(currentSettings : WritingPluginSettings, do
         };
     
     const [topMargin, bottomMargin, leftMargin, rightMargin] = getPageProperties(docxstyling);
-    // "Promises must be awaited, end with a call to .catch, end with a call to .then with a rejection handler or be explicitly marked as ignored with the void operator."
+    // /skip .then and.catch are added to the awaited command
     (async () => {
       const docxBlob = await toDocx(
         doc,
@@ -654,6 +654,7 @@ export async function createDocxFile(currentSettings : WritingPluginSettings, do
       );
       
         if (await this.app.vault.exists(destfilename) ){
+          // /skip this is the appropriate text for the notice
                   new Notice("There is already a file with the specified filename.")
                 } else {
 
@@ -662,13 +663,14 @@ export async function createDocxFile(currentSettings : WritingPluginSettings, do
                   .then((bufftext)=>{
 
                       this.app.vault.createBinary(destfilename ,  bufftext);
+                      // /skip this is the appropriate text for the notice
                       let noticestring = 'The file ' + destfilename + ' was created as a word file and added to vault.'
                       new Notice(noticestring);
                   
 
                   })
                   .catch((error) => {
-                  // Catch any errors that escape the try-catch (shouldn't happen, but safety net)
+                  // /skip this is the appropriate text for the notice
                   new Notice('An unexpected error occurred while creating the DOCX file.');
                 })
                                   

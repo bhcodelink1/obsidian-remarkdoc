@@ -19,12 +19,12 @@ export class WritingSettingTab extends PluginSettingTab {
 		new Setting(containerEl).setName('PDF export').setHeading(); 
 
 		new Setting(containerEl).setName('Default across PDF exports');
-		// containerEl.createEl('h3', {text: 'Default across PDF exports.'});
 
 		new Setting(containerEl)
 			.setName('Font to use in PDF HTML export')
 			.setDesc('Global font for exports to PDF ready HTML')
 			.addText(text => text
+				// /skip this is the appropriate text for the element
 				.setPlaceholder('Palatino Linotype')
 				.setValue(this.plugin.settings.cssFont)
 				.onChange(async (value) => {
@@ -38,7 +38,9 @@ export class WritingSettingTab extends PluginSettingTab {
 				.setDesc('Global spacing for exports to PDF ready HTML')
 				.addDropdown((dropdown) => {
 					dropdown
+					// /skip this is the appropriate text for the element
 					.addOption("100%", "single spaced")
+					// /skip this is the appropriate text for the element
 					.addOption("200%", "double spaced")
 					.setValue(this.plugin.settings.cssSpacing)
 					.onChange(async (value) => {
@@ -63,22 +65,28 @@ export class WritingSettingTab extends PluginSettingTab {
 		new Setting(containerEl).setName('Alternatively, set a default CSS file to use for PDF exports');
 
 		new Setting(containerEl)
+		// /skip this is the appropriate text for the element
 			.setName('Default CSS file for PDF conversion to use')
+			// /skip this is the appropriate text for the element
 			.setDesc('File within vault that will be used as default CSS definition for PDF conversion')
 			.addText(text => text
+				// /skip this is the appropriate text for the element
 				.setPlaceholder('default.css')
 				.setValue(this.plugin.settings.cssFile)
 				.onChange(async (value) => {
 					this.plugin.settings.cssFile = value;
 					await this.plugin.saveSettings();
 				}));
-
+		// /skip this is the appropriate text for the element
 		new Setting(containerEl).setName('Google Doc export').setHeading(); 
+		// /skip this is the appropriate text for the element
 		new Setting(containerEl).setName('Defaults across Google Doc exports');
 
 
 		new Setting(containerEl)
+		// /skip this is the appropriate text for the element
 			.setName('Font to use in gdoc HTML export')
+			// /skip this is the appropriate text for the element
 			.setDesc('Global font for exports to gdoc ready HTML')
 			.addText(text => text
 				.setPlaceholder('Arial')
@@ -90,11 +98,15 @@ export class WritingSettingTab extends PluginSettingTab {
 		
 				
 		new Setting(containerEl)
+		// /skip this is the appropriate text for the element
 				.setName('Spacing to use in gdoc HTML export')
+				// /skip this is the appropriate text for the element
 				.setDesc('Global spacing for exports to gdoc ready HTML')
 				.addDropdown((dropdown) => {
 					dropdown
+					// /skip this is the appropriate text for the element
 					.addOption("100%", "single spaced")
+					// /skip this is the appropriate text for the element
 					.addOption("200%", "double spaced")
 					.setValue(this.plugin.settings.gdoccssSpacing)
 					.onChange(async (value) => {
@@ -104,7 +116,9 @@ export class WritingSettingTab extends PluginSettingTab {
 				});
 
 		new Setting(containerEl)
+		// /skip this is the appropriate text for the element
 				.setName('Paragraph indent to use in gdoc HTML export')
+				// /skip this is the appropriate text for the element
 				.setDesc('Global indent for new paragraphs in exports to gdoc ready HTML')
 				.addDropdown((dropdown) => {
 					dropdown
@@ -116,13 +130,16 @@ export class WritingSettingTab extends PluginSettingTab {
 							await this.plugin.saveSettings();
 				});
 				});
-
+// /skip this is the appropriate text for the element
 		new Setting(containerEl).setName('Alternatively, set a default CSS file to use for gdoc exports');
 
 		new Setting(containerEl)
+		// /skip this is the appropriate text for the element
 			.setName('Default CSS file for gdoc conversion to use')
+			// /skip this is the appropriate text for the element
 			.setDesc('File within vault that will be used as default CSS definition for gdoc conversion')
 			.addText(text => text
+				// /skip this is the appropriate text for the element
 				.setPlaceholder('default.css')
 				.setValue(this.plugin.settings.gdoccssFile)
 				.onChange(async (value) => {
@@ -130,12 +147,16 @@ export class WritingSettingTab extends PluginSettingTab {
 					await this.plugin.saveSettings();
 				}));
 		
+		// /skip this is the appropriate text for the element
 		new Setting(containerEl).setName('Docx export').setHeading(); 
 		
 		new Setting(containerEl)
+		// /skip this is the appropriate text for the element
 			.setName('Font to use in Docx export')
+			// /skip this is the appropriate text for the element
 			.setDesc('Global font for exports to Microsoft Word')
 			.addText(text => text
+				// /skip this is the appropriate text for the element
 				.setPlaceholder('Palatino Linotype')
 				.setValue(this.plugin.settings.docxFont)
 				.onChange(async (value) => {
@@ -145,11 +166,15 @@ export class WritingSettingTab extends PluginSettingTab {
 		
 				
 		new Setting(containerEl)
+		// /skip this is the appropriate text for the element
 				.setName('Spacing to use in Docx export')
+				// /skip this is the appropriate text for the element
 				.setDesc('Global spacing for exports to Microsoft Word')
 				.addDropdown((dropdown) => {
 					dropdown
+					// /skip this is the appropriate text for the element
 					.addOption("1", "single spaced")
+					// /skip this is the appropriate text for the element
 					.addOption("2", "double spaced")
 					.setValue(this.plugin.settings.docxSpacing)
 					.onChange(async (value) => {
@@ -158,7 +183,9 @@ export class WritingSettingTab extends PluginSettingTab {
 				});
 				});
 		new Setting(containerEl)
+		// /skip this is the appropriate text for the element
 				.setName('Color for table borders to use in Docx export')
+				// /skip this is the appropriate text for the element
 				.setDesc('Global table border color for exports to Microsoft Word')
 				.addDropdown((dropdown) => {
 					dropdown
